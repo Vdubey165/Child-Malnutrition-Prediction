@@ -14,8 +14,7 @@ venv/
 # Data files (too large)
 *.dta
 *.zip
-*.pkl
-*.csv
+
 
 # IDE
 .vscode/
