@@ -1,0 +1,708 @@
+district_code,district_name,v024
+1,kupwara,1
+2,badgam,1
+3,leh(ladakh),37
+4,kargil,37
+5,punch,1
+6,rajouri,1
+7,kathua,1
+8,baramula,1
+9,bandipore,1
+10,srinagar,1
+11,ganderbal,1
+12,pulwama,1
+13,shupiyan,1
+14,anantnag,1
+15,kulgam,1
+16,doda,1
+17,ramban,1
+18,kishtwar,1
+19,udhampur,1
+20,reasi,1
+21,jammu,1
+22,samba,1
+23,chamba,2
+24,kangra,2
+25,lahul & spiti,2
+26,kullu,2
+27,mandi,2
+28,hamirpur,2
+29,una,2
+30,bilaspur,2
+31,solan,2
+32,sirmaur,2
+33,shimla,2
+34,kinnaur,2
+36,kapurthala,3
+37,jalandhar,3
+38,hoshiarpur,3
+39,shahid bhagat singh nagar,3
+40,fatehgarh sahib,3
+41,ludhiana,3
+42,moga,3
+44,muktsar,3
+45,faridkot,3
+46,bathinda,3
+47,mansa,3
+48,patiala,3
+49,amritsar,3
+50,tarn taran,3
+51,rupnagar,3
+52,sahibzada ajit singh nagar,3
+53,sangrur,3
+54,barnala,3
+55,chandigarh,4
+56,uttarkashi,5
+57,chamoli,5
+58,rudraprayag,5
+59,tehri garhwal,5
+60,dehradun,5
+61,garhwal,5
+62,pithoragarh,5
+63,bageshwar,5
+64,almora,5
+65,champawat,5
+66,nainital,5
+67,udham singh nagar,5
+68,hardwar,5
+69,panchkula,6
+70,ambala,6
+71,yamunanagar,6
+72,kurukshetra,6
+73,kaithal,6
+74,karnal,6
+75,panipat,6
+76,sonipat,6
+77,jind,6
+78,fatehabad,6
+79,sirsa,6
+80,hisar,6
+82,rohtak,6
+83,jhajjar,6
+84,mahendragarh,6
+85,rewari,6
+86,gurgaon,6
+87,mewat,6
+88,faridabad,6
+89,palwal,6
+99,ganganagar,8
+100,hanumangarh,8
+101,bikaner,8
+102,churu,8
+103,jhunjhunun,8
+104,alwar,8
+105,bharatpur,8
+106,dhaulpur,8
+107,karauli,8
+108,sawai madhopur,8
+109,dausa,8
+110,jaipur,8
+111,sikar,8
+112,nagaur,8
+113,jodhpur,8
+114,jaisalmer,8
+115,barmer,8
+116,jalor,8
+117,sirohi,8
+118,pali,8
+119,ajmer,8
+120,tonk,8
+121,bundi,8
+122,bhilwara,8
+123,rajsamand,8
+124,dungarpur,8
+125,banswara,8
+126,chittaurgarh,8
+127,kota,8
+128,baran,8
+129,jhalawar,8
+130,udaipur,8
+131,pratapgarh,8
+132,saharanpur,9
+134,bijnor,9
+136,rampur,9
+137,jyotiba phule nagar,9
+138,meerut,9
+139,baghpat,9
+141,gautam buddha nagar,9
+142,bulandshahr,9
+143,aligarh,9
+144,mahamaya nagar,9
+145,mathura,9
+146,agra,9
+147,firozabad,9
+148,mainpuri,9
+150,bareilly,9
+151,pilibhit,9
+152,shahjahanpur,9
+153,kheri,9
+154,sitapur,9
+155,hardoi,9
+156,unnao,9
+157,lucknow,9
+159,farrukhabad,9
+160,kannauj,9
+161,etawah,9
+162,auraiya,9
+163,kanpur dehat,9
+164,kanpur nagar,9
+165,jalaun,9
+166,jhansi,9
+167,lalitpur,9
+168,hamirpur,9
+169,mahoba,9
+170,banda,9
+171,chitrakoot,9
+172,fatehpur,9
+173,pratapgarh,9
+174,kaushambi,9
+175,allahabad,9
+176,bara banki,9
+177,faizabad,9
+178,ambedkar nagar,9
+180,bahraich,9
+181,shrawasti,9
+182,balrampur,9
+183,gonda,9
+184,siddharthnagar,9
+185,basti,9
+186,sant kabir nagar,9
+187,mahrajganj,9
+188,gorakhpur,9
+189,kushinagar,9
+190,deoria,9
+191,azamgarh,9
+192,mau,9
+193,ballia,9
+194,jaunpur,9
+195,ghazipur,9
+196,chandauli,9
+197,varanasi,9
+198,sant ravidas nagar (bhadohi),9
+199,mirzapur,9
+200,sonbhadra,9
+201,etah,9
+202,kanshiram nagar,9
+203,pashchim champaran,10
+204,purba champaran,10
+205,sheohar,10
+206,sitamarhi,10
+207,madhubani,10
+208,supaul,10
+209,araria,10
+210,kishanganj,10
+211,purnia,10
+212,katihar,10
+213,madhepura,10
+214,saharsa,10
+215,darbhanga,10
+216,muzaffarpur,10
+217,gopalganj,10
+218,siwan,10
+219,saran,10
+220,vaishali,10
+221,samastipur,10
+222,begusarai,10
+223,khagaria,10
+224,bhagalpur,10
+225,banka,10
+226,munger,10
+227,lakhisarai,10
+228,sheikhpura,10
+229,nalanda,10
+230,patna,10
+231,bhojpur,10
+232,buxar,10
+233,kaimur (bhabua),10
+234,rohtas,10
+235,aurangabad,10
+236,gaya,10
+237,nawada,10
+238,jamui,10
+239,jehanabad,10
+240,arwal,10
+241,north  district,11
+242,west district,11
+243,south district,11
+244,east district,11
+245,tawang,12
+246,west kameng,12
+247,east kameng,12
+248,papum pare,12
+249,upper subansiri,12
+252,upper siang,12
+253,changlang,12
+255,lower subansiri,12
+257,dibang valley,12
+258,lower dibang valley,12
+260,anjaw,12
+261,mon,13
+262,mokokchung,13
+263,zunheboto,13
+264,wokha,13
+265,dimapur,13
+266,phek,13
+267,tuensang,13
+268,longleng,13
+269,kiphire,13
+270,kohima,13
+271,peren,13
+272,senapati,14
+273,tamenglong,14
+274,churachandpur,14
+275,bishnupur,14
+276,thoubal,14
+277,imphal west,14
+278,imphal east,14
+279,ukhrul,14
+280,chandel,14
+281,mamit,15
+282,kolasib,15
+283,aizawl,15
+284,champhai,15
+285,serchhip,15
+286,lunglei,15
+287,lawngtlai,15
+288,saiha,15
+291,dhalai,16
+295,south garo hills,17
+297,ribhoi,17
+298,east khasi hills,17
+300,kokrajhar,18
+302,goalpara,18
+303,barpeta,18
+304,morigaon,18
+307,lakhimpur,18
+308,dhemaji,18
+309,tinsukia,18
+310,dibrugarh,18
+313,golaghat,18
+315,dima hasao,18
+316,cachar,18
+317,karimganj,18
+318,hailakandi,18
+319,bongaigaon,18
+320,chirang,18
+321,kamrup,18
+322,kamrup metropolitan,18
+323,nalbari,18
+324,baksa,18
+325,darrang,18
+326,udalguri,18
+327,darjiling,19
+328,jalpaiguri,19
+329,koch bihar,19
+330,uttar dinajpur,19
+331,dakshin dinajpur,19
+332,maldah,19
+333,murshidabad,19
+334,birbhum,19
+336,nadia,19
+337,north twenty four parganas,19
+338,hugli,19
+339,bankura,19
+340,puruliya,19
+341,haora,19
+342,kolkata,19
+343,south twenty four parganas,19
+344,paschim medinipur,19
+345,purba medinipur,19
+346,garhwa,20
+347,chatra,20
+348,kodarma,20
+349,giridih,20
+350,deoghar,20
+351,godda,20
+352,sahibganj,20
+353,pakur,20
+354,dhanbad,20
+355,bokaro,20
+356,lohardaga,20
+357,purbi singhbhum,20
+358,palamu,20
+359,latehar,20
+360,hazaribagh,20
+361,ramgarh,20
+362,dumka,20
+363,jamtara,20
+364,ranchi,20
+365,khunti,20
+366,gumla,20
+367,simdega,20
+368,pashchimi singhbhum,20
+369,saraikela-kharsawan,20
+370,bargarh,21
+371,jharsuguda,21
+372,sambalpur,21
+373,debagarh,21
+374,sundargarh,21
+375,kendujhar,21
+376,mayurbhanj,21
+377,baleshwar,21
+378,bhadrak,21
+379,kendrapara,21
+380,jagatsinghapur,21
+381,cuttack,21
+382,jajapur,21
+383,dhenkanal,21
+384,anugul,21
+385,nayagarh,21
+386,khordha,21
+387,puri,21
+388,ganjam,21
+389,gajapati,21
+390,kandhamal,21
+391,baudh,21
+392,subarnapur,21
+393,balangir,21
+394,nuapada,21
+395,kalahandi,21
+396,rayagada,21
+397,nabarangapur,21
+398,koraput,21
+399,malkangiri,21
+400,koriya,22
+402,jashpur,22
+403,raigarh,22
+404,korba,22
+405,janjgir - champa,22
+407,kabeerdham,22
+408,rajnandgaon,22
+411,mahasamund,22
+412,dhamtari,22
+413,uttar bastar kanker,22
+415,narayanpur,22
+417,bijapur,22
+418,sheopur,23
+419,morena,23
+420,bhind,23
+421,gwalior,23
+422,datia,23
+423,shivpuri,23
+424,tikamgarh,23
+425,chhatarpur,23
+426,panna,23
+427,sagar,23
+428,damoh,23
+429,satna,23
+430,rewa,23
+431,umaria,23
+432,neemuch,23
+433,mandsaur,23
+434,ratlam,23
+435,ujjain,23
+437,dewas,23
+438,dhar,23
+439,indore,23
+440,khargone (west nimar),23
+441,barwani,23
+442,rajgarh,23
+443,vidisha,23
+444,bhopal,23
+445,sehore,23
+446,raisen,23
+447,betul,23
+448,harda,23
+449,hoshangabad,23
+450,katni,23
+451,jabalpur,23
+452,narsimhapur,23
+453,dindori,23
+454,mandla,23
+455,chhindwara,23
+456,seoni,23
+457,balaghat,23
+458,guna,23
+459,ashoknagar,23
+460,shahdol,23
+461,anuppur,23
+462,sidhi,23
+463,singrauli,23
+464,jhabua,23
+465,alirajpur,23
+466,khandwa (east nimar),23
+467,burhanpur,23
+468,kachchh,24
+469,banas kantha,24
+470,patan,24
+471,mahesana,24
+473,gandhinagar,24
+478,porbandar,24
+480,amreli,24
+482,anand,24
+485,dohad,24
+487,narmada,24
+488,bharuch,24
+489,the dangs,24
+490,navsari,24
+491,valsad,24
+492,surat,24
+493,tapi,24
+494,diu,25
+495,daman,25
+496,dadra & nagar haveli,25
+497,nandurbar,27
+498,dhule,27
+499,jalgaon,27
+500,buldana,27
+501,akola,27
+502,washim,27
+503,amravati,27
+504,wardha,27
+505,nagpur,27
+506,bhandara,27
+507,gondiya,27
+508,gadchiroli,27
+509,chandrapur,27
+510,yavatmal,27
+511,nanded,27
+512,hingoli,27
+513,parbhani,27
+514,jalna,27
+515,aurangabad,27
+516,nashik,27
+518,mumbai suburban,27
+519,mumbai,27
+520,raigarh,27
+521,pune,27
+522,ahmadnagar,27
+523,bid,27
+524,latur,27
+525,osmanabad,27
+526,solapur,27
+527,satara,27
+528,ratnagiri,27
+529,sindhudurg,27
+530,kolhapur,27
+531,sangli,27
+542,srikakulam,28
+543,vizianagaram,28
+544,visakhapatnam,28
+545,east godavari,28
+546,west godavari,28
+547,krishna,28
+548,guntur,28
+549,prakasam,28
+550,sri potti sriramulu nellore,28
+551,y.s.r.,28
+552,kurnool,28
+553,anantapur,28
+554,chittoor,28
+555,belgaum,29
+556,bagalkot,29
+557,bijapur,29
+558,bidar,29
+559,raichur,29
+560,koppal,29
+561,gadag,29
+562,dharwad,29
+563,uttara kannada,29
+564,haveri,29
+565,bellary,29
+566,chitradurga,29
+567,davanagere,29
+568,shimoga,29
+569,udupi,29
+570,chikmagalur,29
+571,tumkur,29
+572,bangalore,29
+573,mandya,29
+574,hassan,29
+575,dakshina kannada,29
+576,kodagu,29
+577,mysore,29
+578,chamarajanagar,29
+579,gulbarga,29
+580,yadgir,29
+581,kolar,29
+582,chikkaballapura,29
+583,bangalore rural,29
+584,ramanagara,29
+585,north goa,30
+586,south goa,30
+587,lakshadweep,31
+588,kasaragod,32
+589,kannur,32
+590,wayanad,32
+591,kozhikode,32
+592,malappuram,32
+593,palakkad,32
+594,thrissur,32
+595,ernakulam,32
+596,idukki,32
+597,kottayam,32
+598,alappuzha,32
+599,pathanamthitta,32
+600,kollam,32
+601,thiruvananthapuram,32
+602,thiruvallur,33
+603,chennai,33
+604,kancheepuram,33
+605,vellore,33
+606,tiruvannamalai,33
+607,viluppuram,33
+608,salem,33
+609,namakkal,33
+610,erode,33
+611,the nilgiris,33
+612,dindigul,33
+613,karur,33
+614,tiruchirappalli,33
+615,perambalur,33
+616,ariyalur,33
+617,cuddalore,33
+618,nagapattinam,33
+619,thiruvarur,33
+620,thanjavur,33
+621,pudukkottai,33
+622,sivaganga,33
+623,madurai,33
+624,theni,33
+625,virudhunagar,33
+626,ramanathapuram,33
+627,thoothukkudi,33
+628,tirunelveli,33
+629,kanniyakumari,33
+630,dharmapuri,33
+631,krishnagiri,33
+632,coimbatore,33
+633,tiruppur,33
+634,yanam,34
+635,puducherry,34
+636,mahe,34
+637,karaikal,34
+638,nicobars,35
+639,north  & middle andaman,35
+640,south andaman,35
+801,east siang,12
+802,kra daadi,12
+803,kurung kumey,12
+804,lohit,12
+805,longding,12
+806,namsai,12
+807,siang,12
+808,tirap,12
+809,west siang,12
+810,biswanath,18
+811,charaideo,18
+812,dhubri,18
+813,hojai,18
+814,jorhat,18
+815,karbi anglong,18
+816,majuli,18
+817,nagaon,18
+818,sivasagar,18
+819,sonitpur,18
+820,south salmara mancachar,18
+821,west karbi anglong,18
+822,balod,22
+823,baloda bazar,22
+824,balrampur,22
+825,bastar,22
+826,bemetara,22
+827,bilaspur,22
+828,dantewada,22
+829,durg,22
+830,gariyaband,22
+831,kodagaon,22
+832,mungeli,22
+833,raipur,22
+834,sukma,22
+835,surajpur,22
+836,surguja,22
+837,central,7
+838,east,7
+839,new delhi,7
+840,north,7
+841,north east,7
+842,north west,7
+843,shahdara,7
+844,south,7
+845,south east,7
+846,south west,7
+847,west,7
+848,ahmadabad,24
+849,aravali,24
+850,bhavnagar,24
+851,botad,24
+852,chhota udaipur,24
+853,devbhumi dwarka,24
+854,gir somnath,24
+855,jamnagar,24
+856,junagadh,24
+857,kheda,24
+858,mahisagar,24
+859,morbi,24
+860,panch mahals,24
+861,rajkot,24
+862,sabar kantha,24
+863,surendranagar,24
+864,vadodara,24
+865,bhiwani,6
+866,charkhi dadri,6
+867,agar malwa,23
+868,shajapur,23
+869,palghar,27
+870,thane,27
+871,east garo hills,17
+872,east jantia hills,17
+873,north garo hills,17
+874,south west garo hills,17
+875,south west khasi hills,17
+876,west garo hills,17
+877,west jaintia hills,17
+878,west khasi hills,17
+879,fazilka,3
+880,firozpur,3
+881,gurdaspur,3
+882,pathankot,3
+883,adilabad,36
+884,bhadradri kothagudem,36
+885,hyderabad,36
+886,jagitial,36
+887,jangoan,36
+888,jayashankar bhupalapally,36
+889,jogulamba gadwal,36
+890,kamareddy,36
+891,karimnagar,36
+892,khammam,36
+893,komaram bheem asifabad,36
+894,mahabubabad,36
+895,mahabubnagar,36
+896,mancherial,36
+897,medak,36
+898,medchal-malkajgiri,36
+899,nagarkurnool,36
+900,nalgonda,36
+901,nirmal,36
+902,nizamabad,36
+903,peddapalli,36
+904,rajanna sircilla,36
+905,ranga reddy,36
+906,sangareddy,36
+907,siddipet,36
+908,suryapet,36
+909,vikarabad,36
+910,wanaparthy,36
+911,warangal rural,36
+912,warangal urban,36
+913,yadadri bhuvanagiri,36
+914,gomati,16
+915,khowai,16
+916,north tripura,16
+917,sepahijala,16
+918,south tripura,16
+919,unakoti,16
+920,west tripura,16
+921,amethi,9
+922,budaun,9
+923,ghaziabad,9
+924,hapur,9
+925,moradabad,9
+926,muzaffarnagar,9
+927,rae bareli,9
+928,sambhal,9
+929,shamli,9
+930,sultanpur,9
+931,paschim barddhaman,19
+932,purba barddhaman,19

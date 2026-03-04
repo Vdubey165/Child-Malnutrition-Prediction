@@ -1,5 +1,4 @@
-# Create .gitignore
-echo "# Python
+# ── Python ──────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
@@ -7,23 +6,60 @@ __pycache__/
 .Python
 env/
 venv/
+.env
+*.egg-info/
+dist/
+build/
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# ── FastAPI / Uvicorn ────────────────────────────────────
+*.log
 
-# Data files (too large)
+# ── Jupyter Notebook ─────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── Data files (large / raw) ─────────────────────────────
+Data/Raw/
 *.dta
 *.zip
+*.csv.gz
 
+# Keep processed CSVs that the app needs at runtime
+!Data/Processed/district_predictions_all_types.csv
+!Data/Processed/district_malnutrition.csv
+!Data/Processed/district_malnutrition_enhanced.csv
+!Data/Processed/complete_district_mapping.csv
+!Data/Processed/district_name_mapping.csv
+!Data/Processed/district_state_mapping.csv
+!Data/Processed/state_level_summary.csv
 
-# IDE
+# ── ML Models ────────────────────────────────────────────
+# Models are ~9.5MB total — safe to commit directly
+*.joblib
+*.h5
+
+# ── React / Node ─────────────────────────────────────────
+frontend/node_modules/
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+frontend/build/
+frontend/dist/
+frontend/.DS_Store
+
+# ── IDE ──────────────────────────────────────────────────
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# OS
+# ── OS ───────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Streamlit
+# ── Streamlit (legacy) ───────────────────────────────────
 .streamlit/
-" > .gitignore
+
+# ── Outputs / Figures (generated, not source) ────────────
+Outputs/Figures/

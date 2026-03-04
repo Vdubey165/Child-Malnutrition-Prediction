@@ -1,0 +1,335 @@
+/* ── KPI grid ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Risk distribution banner ── */
+.risk-distribution {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.risk-dist-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.risk-dist-note {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-left: 0.25rem;
+}
+
+.risk-dist-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.risk-dist-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.risk-dist-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  width: 55px;
+  flex-shrink: 0;
+}
+
+.risk-dist-track {
+  flex: 1;
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.risk-dist-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.6s ease;
+}
+
+.risk-dist-count {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  width: 140px;
+  flex-shrink: 0;
+}
+
+/* ── Chart + insights ── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-section,
+.insights-section { height: fit-content; }
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.section-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+}
+
+.insight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.insight-item {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+}
+
+.insight-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.insight-item h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+}
+
+.insight-item p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── Priority districts table ── */
+.districts-preview {
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.view-all-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  margin-top: 4px;
+}
+
+.districts-table { overflow-x: auto; }
+
+.districts-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.districts-table th {
+  text-align: left;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+
+.districts-table td {
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+}
+
+.priority-row:hover { background: #f8fafc; }
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.badge-stunting    { background: var(--stunting-light);    color: var(--stunting); }
+.badge-wasting     { background: var(--wasting-light);     color: var(--wasting); }
+.badge-underweight { background: var(--underweight-light); color: var(--underweight); }
+
+.risk-level-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ── Model performance ── */
+.model-perf { margin-bottom: 1.5rem; }
+
+.toggle-models-btn {
+  padding: 0.4rem 0.875rem;
+  border: 1.5px solid #6366f1;
+  border-radius: 6px;
+  background: transparent;
+  color: #6366f1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin-top: 4px;
+}
+
+.toggle-models-btn:hover { background: #6366f1; color: white; }
+
+.model-table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+
+.model-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.model-table th {
+  text-align: left;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+
+.model-table td {
+  padding: 0.625rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+}
+
+.best-model-row { background: #f5f3ff; }
+.best-model-row td { border-bottom-color: #e0e7ff; }
+
+.perf-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.perf-bar-track {
+  flex: 1;
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 80px;
+}
+
+.perf-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.stunting-bar    { background: var(--stunting); }
+.wasting-bar     { background: var(--wasting); }
+.underweight-bar { background: var(--underweight); }
+
+.best-badge {
+  background: #f5f3ff;
+  color: #6366f1;
+  border: 1px solid #6366f1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.model-perf-note {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: #f8fafc;
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  border-left: 3px solid #6366f1;
+  line-height: 1.6;
+}
+
+/* ── Loading ── */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 1200px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .risk-dist-count { display: none; }
+}
