@@ -6,8 +6,8 @@ import DashBoard from './pages/DashBoard';
 import Prediction from './pages/Prediction';
 import DistrictExplorer from './pages/DistrictExplorer';
 import About from './pages/About';
-import WakeUpBanner from './components/WakeUpBanner';
-import { warmupBackend } from './services/warmup';
+import WakeupBanner from './components/WakeupBanner';
+import { warmupBackend } from './services/Warmup';
 import './App.css';
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
 
   return (
     <>
-      {!backendReady && <WakeUpBanner seconds={waitSeconds} />}
+      {!backendReady && <WakeupBanner seconds={waitSeconds} />}
       <Router>
         <Routes>
           {/* Landing page - no sidebar */}

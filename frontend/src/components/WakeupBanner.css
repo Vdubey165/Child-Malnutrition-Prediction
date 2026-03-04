@@ -1,0 +1,42 @@
+.wakeup-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 1.5rem;
+  background: #1e293b;
+  color: white;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.wakeup-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #60a5fa;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.wakeup-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.wakeup-text strong {
+  color: #60a5fa;
+}
+
+.wakeup-text span {
+  color: #94a3b8;
+  font-size: 0.78rem;
+}
