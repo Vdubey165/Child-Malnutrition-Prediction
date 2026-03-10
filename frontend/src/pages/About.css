@@ -426,3 +426,15 @@
   .fi-label { width: 130px; }
   .lim-toggle-left { flex-wrap: wrap; }
 }
+
+@media (max-width: 640px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .model-table { font-size: 0.72rem; }
+  .model-table th, .model-table td { padding: 0.4rem 0.35rem; }
+  .metric-cell { min-width: 70px; }
+  .metric-bar-track { min-width: 40px; }
+  .fi-tabs { flex-wrap: wrap; }
+  .fi-label { width: 110px; font-size: 0.72rem; }
+  .r2-reasons { gap: 0.5rem; }
+  .info-grid { grid-template-columns: 1fr 1fr; }
+}

@@ -50,8 +50,14 @@
 }
 
 @media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
   .main-content {
     margin-left: 0;
+    padding-top: 56px;
+    width: 100%;
   }
   
   .page-container {

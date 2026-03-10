@@ -333,3 +333,15 @@
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .risk-dist-count { display: none; }
 }
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .districts-table { font-size: 0.75rem; }
+  .districts-table th, .districts-table td { padding: 0.5rem 0.4rem; }
+  .rank-badge { width: 22px; height: 22px; font-size: 0.65rem; }
+  .model-table { font-size: 0.72rem; }
+  .model-table th, .model-table td { padding: 0.4rem 0.35rem; }
+  .perf-bar-track { min-width: 50px; }
+  .risk-dist-count { display: none; }
+  .section-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+}

@@ -1,3 +1,4 @@
+/* ── Desktop sidebar ── */
 .sidebar {
   width: 280px;
   height: 100vh;
@@ -8,7 +9,8 @@
   top: 0;
   display: flex;
   flex-direction: column;
-  z-index: 100;
+  z-index: 200;
+  transition: transform 0.3s ease;
 }
 
 .sidebar-header {
@@ -22,9 +24,7 @@
   gap: 0.75rem;
 }
 
-.logo-icon {
-  font-size: 2rem;
-}
+.logo-icon { font-size: 2rem; }
 
 .logo-text {
   font-size: 1.1rem;
@@ -78,4 +78,80 @@
 .footer-subtext {
   font-size: 0.75rem;
   color: var(--text-secondary);
+}
+
+/* ── Mobile top bar (hidden on desktop) ── */
+.mobile-topbar {
+  display: none;
+}
+
+/* ── Overlay ── */
+.sidebar-overlay {
+  display: none;
+}
+
+/* ── Hamburger button ── */
+.hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.hamburger:hover { background: var(--bg-hover); }
+
+/* ── Mobile styles ── */
+@media (max-width: 768px) {
+  /* Hide desktop sidebar by default, slide in when open */
+  .sidebar {
+    transform: translateX(-100%);
+    top: 56px;         /* below mobile topbar */
+    height: calc(100vh - 56px);
+    width: 260px;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  /* Show mobile top bar */
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    padding: 0 1rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    z-index: 300;
+  }
+
+  .mobile-topbar .logo-text {
+    font-size: 0.95rem;
+  }
+
+  /* Show overlay when sidebar open */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 56px 0 0 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 199;
+  }
+
+  /* Hide sidebar header logo on mobile (shown in topbar instead) */
+  .sidebar-header {
+    display: none;
+  }
 }

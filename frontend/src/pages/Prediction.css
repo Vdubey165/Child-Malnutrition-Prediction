@@ -458,3 +458,16 @@
   .results-section { position: static; }
   .persona-desc { display: none; }
 }
+
+@media (max-width: 768px) {
+  .prediction-grid { grid-template-columns: 1fr; }
+  .persona-selector { flex-direction: column; gap: 0.5rem; }
+  .persona-btn { width: 100%; justify-content: center; }
+  .form-grid { grid-template-columns: 1fr; }
+  .results-cards { grid-template-columns: 1fr; }
+  .action-plan-grid { grid-template-columns: 1fr; }
+  .risk-flags { font-size: 0.78rem; }
+  .explain-tabs { flex-wrap: wrap; }
+  .fi-label { width: 120px; font-size: 0.72rem; }
+  .how-it-works-body { font-size: 0.82rem; }
+}

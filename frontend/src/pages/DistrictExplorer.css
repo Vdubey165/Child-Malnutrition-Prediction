@@ -262,3 +262,13 @@
   .explorer-controls { flex-direction: column; align-items: stretch; }
   .results-count { margin-left: 0; }
 }
+
+@media (max-width: 640px) {
+  .districts-grid { grid-template-columns: 1fr; }
+  .risk-summary { flex-wrap: wrap; gap: 0.4rem; }
+  .risk-pill { font-size: 0.72rem; padding: 0.2rem 0.5rem; }
+  .district-metrics { gap: 0.5rem; }
+  .metric-row { font-size: 0.78rem; }
+  .explorer-controls { gap: 0.5rem; }
+  .search-input { font-size: 0.85rem; }
+}
