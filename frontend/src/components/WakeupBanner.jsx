@@ -1,6 +1,6 @@
-// src/components/WakeUpBanner.jsx
+// src/components/WakeupBanner.jsx
 import React from 'react';
-import './WakeUpBanner.css';
+import './WakeupBanner.css';
 
 const WakeUpBanner = ({ seconds }) => (
   <div className="wakeup-banner">
