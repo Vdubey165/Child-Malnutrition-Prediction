@@ -1,0 +1,33 @@
+# .github/workflows/keep-alive.yml
+# Pings the Render backend every 14 minutes to prevent free-tier sleep.
+# Render spins down after 15 min of inactivity — this stays just inside that window.
+# Cost: free. GitHub Actions free tier = 2,000 min/month; this uses ~3,000/month
+# so set it to every 14 min on weekdays only, or upgrade UptimeRobot as backup.
+
+name: Keep Render Alive
+
+on:
+  schedule:
+    # Runs every 14 minutes, 24/7
+    # Cron syntax: minute hour day month weekday
+    - cron: '*/14 * * * *'
+  workflow_dispatch: # also allows manual trigger from GitHub UI
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Ping Render backend /health
+        run: |
+          echo "Pinging backend at $(date)..."
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            --max-time 30 \
+            https://child-malnutrition-prediction-api.onrender.com/health)
+          echo "Response status: $STATUS"
+          if [ "$STATUS" = "200" ]; then
+            echo "✅ Backend is awake"
+          else
+            echo "⚠️  Backend returned $STATUS — may still be waking up"
+          fi

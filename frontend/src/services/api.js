@@ -1,32 +1,55 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL 
+const API_BASE_URL = process.env.REACT_APP_API_URL
   || 'https://child-malnutrition-prediction-api.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 });
 
-export const predictMalnutrition = async (data) => {
-  const response = await api.post('/api/predict', data);
-  return response.data;
-};
+// ─── Static district data (bundled with Vercel, never hits Render) ───────────
+// Import the pre-built JSON so Dashboard and DistrictExplorer load instantly.
+// Only the /api/predict endpoint needs the live backend.
+import districtDataJson from '../data/districtData.json';
 
-export const getAllDistricts = async (limit = 100) => {
-  const response = await api.get(`/api/districts?limit=${limit}`);
-  return response.data;
+let _districtCache = null;
+
+export const getAllDistricts = async (_limit = 707) => {
+  if (_districtCache) return _districtCache;
+  // Use bundled static data — no network call needed
+  _districtCache = districtDataJson;
+  return _districtCache;
 };
 
 export const getDistrictById = async (id) => {
-  const response = await api.get(`/api/districts/${id}`);
-  return response.data;
+  const data = await getAllDistricts();
+  const district = data.districts.find(d => d.district === id);
+  if (!district) throw new Error(`District ${id} not found`);
+  return district;
 };
 
 export const getStatistics = async () => {
-  const response = await api.get('/api/statistics');
+  // Compute from static data — no network call
+  const data = await getAllDistricts();
+  const districts = data.districts;
+  const avg = (key) =>
+    Math.round((districts.reduce((s, d) => s + d[key], 0) / districts.length) * 10) / 10;
+
+  return {
+    national_average: {
+      stunting:    avg('actual_stunting'),
+      wasting:     avg('actual_wasting'),
+      underweight: avg('actual_underweight'),
+    },
+    total_districts: districts.length,
+  };
+};
+
+// ─── Live endpoints (require Render backend) ─────────────────────────────────
+
+export const predictMalnutrition = async (data) => {
+  const response = await api.post('/api/predict', data);
   return response.data;
 };
 
