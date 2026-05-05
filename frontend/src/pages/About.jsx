@@ -327,7 +327,7 @@ const About = () => {
               <strong>GitHub</strong>
               <p><a href="https://github.com/Vdubey165/Child-Malnutrition-Prediction" target="_blank" rel="noopener noreferrer">View Repository</a></p>
             </div>
-            <div><strong>Year</strong><p>2024</p></div>
+            <div><strong>Year</strong><p>2026</p></div>
             <div><strong>Tech Stack</strong><p>React · FastAPI · Scikit-learn · XGBoost</p></div>
             <div><strong>Data</strong><p>NFHS-5 (2019–21), Govt. of India</p></div>
             <div><strong>License</strong><p>MIT — Open Source</p></div>
