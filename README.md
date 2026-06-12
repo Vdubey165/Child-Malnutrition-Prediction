@@ -10,27 +10,27 @@ A full-stack ML web application for predicting child malnutrition rates across I
 ## 📸 Screenshots
 
 **Landing Page**
-![Landing Page](docs/screenshots/landing.png)
+![Landing Page](screenshots/landing.png)
 > 232,920 children analyzed · 707 districts covered · 69% prediction accuracy (R² underweight)
 
 **Dashboard — National Overview**
-![Dashboard](docs/screenshots/dashboard.png)
+![Dashboard](screenshots/dashboard.png)
 > National averages: Stunting 29.7% · Wasting 15.9% · Underweight 26.6% · District risk distribution across 707 districts
 
 **District Explorer**
-![Districts](docs/screenshots/districts.png)
+![Districts](screenshots/districts.png)
 > Browse and filter all 707 districts by composite risk score. High-risk districts (119) flagged with stunting, wasting, and underweight rates.
 
 **Malnutrition Risk Estimator**
-![Prediction](docs/screenshots/prediction.png)
+![Prediction](screenshots/prediction.png)
 > Input a district socioeconomic profile to get predicted stunting, wasting, and underweight rates with risk classification vs national average.
 
 **Feature Importance Analysis**
-![Feature Importance](docs/screenshots/feature-importance.png)
+![Feature Importance](screenshots/feature-importance.png)
 > Mother's BMI (31%) is the dominant predictor for stunting, followed by Wealth Index (10.9%) and Mother's Education (8.7%).
 
 **About — Model Evaluation**
-![About](docs/screenshots/about.png)
+![About](screenshots/about.png)
 > R² and RMSE comparison across all 3 algorithms per malnutrition target.
 
 ---
