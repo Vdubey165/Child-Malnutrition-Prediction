@@ -74,8 +74,18 @@ The `Notebook/` directory contains the full ML pipeline:
 ```
 child-malnutrition/
 ├── backend/
-│   ├── main.py                  # FastAPI app & routes
-│   ├── district_mapping.py      # District name enrichment (707 districts)
+│   ├── main.py                      # FastAPI entry point
+│   ├── config.py                    # All paths and constants
+│   ├── models/
+│   │   └── schemas.py               # Pydantic request/response schemas
+│   ├── services/
+│   │   ├── district_mapping.py      # District & state name enrichment
+│   │   ├── ml_models.py             # Model loading (graceful 503 on failure)
+│   │   └── district_data.py         # District CSV loading
+│   ├── routers/
+│   │   ├── prediction.py            # POST /api/predict
+│   │   ├── districts.py             # GET /api/districts, /api/districts/{id}
+│   │   └── statistics.py            # GET /api/statistics
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
@@ -87,21 +97,22 @@ child-malnutrition/
 ├── Notebook/
 │   ├── Data_exploration.ipynb
 │   ├── 02_feature_engineering_and_modeling.ipynb
-│   └── Feature-Engineering.ipynb   # placeholder
+│   └── Feature-Engineering.ipynb
 ├── Models/
 │   ├── random_forest_stunting.pkl
 │   ├── random_forest_wasting.pkl
 │   └── xgboost_underweight.pkl
 ├── Data/
-│   ├── Raw/                     # NFHS-5 Stata files (not in repo)
+│   ├── Raw/                         # NFHS-5 Stata files (not in repo)
 │   └── Processed/
 │       ├── district_malnutrition_enhanced.csv
 │       ├── district_predictions_all_types.csv
+│       ├── complete_district_mapping.csv
 │       ├── district_name_mapping.csv
 │       └── state_level_summary.csv
 └── .github/
     └── workflows/
-        └── keep-alive.yml       # Prevents Render cold starts
+        └── keep-alive.yml           # Prevents Render cold starts
 ```
 
 ---
@@ -128,7 +139,7 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-API will be running at `http://localhost:8000`
+API will be running at `http://localhost:8000` · Docs at `http://localhost:8000/docs`
 
 ### 3. Frontend setup
 
@@ -156,11 +167,11 @@ Frontend will be running at `http://localhost:5173`
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/` | API info |
-| `GET` | `/health` | Health check — models & data status |
+| `GET` | `/health` | Health check — models & data loaded status |
 | `POST` | `/api/predict` | Predict stunting, wasting, underweight |
-| `GET` | `/api/districts` | All district data (paginated via `?limit=`) |
+| `GET` | `/api/districts` | All districts (paginated via `?limit=` and `?offset=`, filter via `?state=`) |
 | `GET` | `/api/districts/{id}` | Single district by ID |
-| `GET` | `/api/statistics` | National averages across all districts |
+| `GET` | `/api/statistics` | National averages across all 707 districts |
 
 ### Sample prediction request
 
