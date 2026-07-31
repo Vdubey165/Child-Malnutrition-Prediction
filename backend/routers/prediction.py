@@ -6,7 +6,8 @@ import numpy as np
 from fastapi import APIRouter, HTTPException
 
 from models.schemas import PredictionInput, PredictionOutput
-from services.ml_models import get_models, models_ready, models_error
+from services import ml_models
+from services.ml_models import get_models
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -18,10 +19,10 @@ def _get_risk(val: float, low: float, med: float) -> str:
 
 @router.post("/predict", response_model=PredictionOutput)
 async def predict_malnutrition(input_data: PredictionInput):
-    if not models_ready:
+    if not ml_models.models_ready:
         raise HTTPException(
             status_code=503,
-            detail=f"Models not available: {models_error}",
+            detail=f"Models not available: {ml_models.models_error}",
         )
 
     features = np.array([[

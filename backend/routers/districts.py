@@ -6,7 +6,8 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException
 
-from services.district_data import get_district_data, data_ready, data_error
+from services import district_data
+from services.district_data import get_district_data
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -14,10 +15,10 @@ router = APIRouter()
 
 def _require_data():
     """Raise 503 if district data isn't loaded yet."""
-    if not data_ready:
+    if not district_data.data_ready:
         raise HTTPException(
             status_code=503,
-            detail=f"District data not available: {data_error}",
+            detail=f"District data not available: {district_data.data_error}",
         )
 
 
