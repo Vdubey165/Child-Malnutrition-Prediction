@@ -18,7 +18,7 @@
 
 substitutions:
   _REGION: asia-south1
-  _SERVICE_NAME: child-malnutrition-api
+  _SERVICE_NAME: childmal-backend
   _REPOSITORY: backend-images
 
 steps:
