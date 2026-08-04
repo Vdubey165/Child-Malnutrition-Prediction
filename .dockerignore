@@ -5,3 +5,9 @@
 .gitignore
 *.md
 backend/backup.txt
+Data/Raw
+Notebook
+Outputs
+screenshots
+frontend
+NOTEBOOK_REVISION_GUIDE.md

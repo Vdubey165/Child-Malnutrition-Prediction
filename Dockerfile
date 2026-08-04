@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir -r backend/requirements.txt
 # Copy app code + the model/data files it loads at startup
 COPY backend/ backend/
 COPY Models/ Models/
-COPY Data/ Data/
+COPY Data/Processed/ Data/Processed/
 
 WORKDIR /app/backend
 
