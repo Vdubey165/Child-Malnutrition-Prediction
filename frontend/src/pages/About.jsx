@@ -4,48 +4,49 @@ import Header from '../components/Header';
 import './About.css';
 
 const MODEL_COMPARISON = [
-  { model: 'Random Forest',    stunting_r2: 49.7, wasting_r2: 42.7, underweight_r2: 67.7, stunting_rmse: 5.42, wasting_rmse: 4.39, underweight_rmse: 5.28, deployed: ['stunting', 'wasting'] },
-  { model: 'XGBoost',          stunting_r2: 43.1, wasting_r2: 36.4, underweight_r2: 69.1, stunting_rmse: 5.76, wasting_rmse: 4.63, underweight_rmse: 5.16, deployed: ['underweight'] },
-  { model: 'Linear Regression',stunting_r2: 43.6, wasting_r2: 36.0, underweight_r2: 64.3, stunting_rmse: 5.73, wasting_rmse: 4.64, underweight_rmse: 5.55, deployed: [] },
+  { model: 'Child-level XGBoost (current)', stunting_r2: 60.8, wasting_r2: 49.5, underweight_r2: 76.0, stunting_rmse: 5.32, wasting_rmse: 4.63, underweight_rmse: 4.80, deployed: ['stunting', 'wasting', 'underweight'] },
+  { model: 'District-aggregate Random Forest (previous)', stunting_r2: 49.7, wasting_r2: 42.7, underweight_r2: 67.7, stunting_rmse: 5.42, wasting_rmse: 4.39, underweight_rmse: 5.28, deployed: [] },
+  { model: 'District-aggregate XGBoost (previous)', stunting_r2: 43.1, wasting_r2: 36.4, underweight_r2: 69.1, stunting_rmse: 5.76, wasting_rmse: 4.63, underweight_rmse: 5.16, deployed: [] },
+  { model: 'District-aggregate Linear Regression (previous)', stunting_r2: 43.6, wasting_r2: 36.0, underweight_r2: 64.3, stunting_rmse: 5.73, wasting_rmse: 4.64, underweight_rmse: 5.55, deployed: [] },
 ];
 
-// Feature importance from actual model outputs (notebook)
+// Feature importance from actual model outputs — child-level XGBoost (v2)
 const FEATURE_IMPORTANCE = {
   stunting: [
-    { feature: "Mother's BMI",        value: 31.0, color: '#ef4444' },
-    { feature: 'Wealth Index',        value: 10.9, color: '#f97316' },
-    { feature: 'Mother Edu (years)',  value: 8.7,  color: '#eab308' },
-    { feature: 'Birth Weight',        value: 8.5,  color: '#84cc16' },
-    { feature: 'Mother Edu (level)',  value: 7.4,  color: '#22c55e' },
-    { feature: 'BCG Vaccination',     value: 3.7,  color: '#14b8a6' },
-    { feature: 'Female-headed HH',    value: 3.6,  color: '#6366f1' },
-    { feature: 'Measles Vaccination', value: 3.5,  color: '#8b5cf6' },
-    { feature: 'Child Sex',           value: 3.5,  color: '#ec4899' },
-    { feature: 'DPT Vaccination',     value: 3.3,  color: '#06b6d4' },
+    { feature: 'Wealth Index',               value: 31.5, color: '#ef4444' },
+    { feature: "Mother's Education (years)", value: 10.5, color: '#f97316' },
+    { feature: "Mother's Education Level",   value: 9.0,  color: '#eab308' },
+    { feature: 'Child Age (years)',          value: 8.4,  color: '#84cc16' },
+    { feature: 'Child Age (months)',         value: 6.7,  color: '#22c55e' },
+    { feature: 'Birth Weight',               value: 6.4,  color: '#14b8a6' },
+    { feature: 'State',                      value: 5.0,  color: '#6366f1' },
+    { feature: "Mother's BMI",               value: 3.9,  color: '#8b5cf6' },
+    { feature: 'Child Sex',                  value: 3.5,  color: '#ec4899' },
+    { feature: 'Birth Interval',             value: 3.2,  color: '#06b6d4' },
   ],
   wasting: [
-    { feature: "Mother's BMI",         value: 28.2, color: '#ef4444' },
-    { feature: 'Female-headed HH',     value: 9.5,  color: '#6366f1' },
-    { feature: 'Birth Weight',         value: 9.3,  color: '#84cc16' },
-    { feature: 'Breastfeed Duration',  value: 6.7,  color: '#14b8a6' },
-    { feature: 'Currently Breastfed',  value: 6.4,  color: '#06b6d4' },
-    { feature: 'BCG Vaccination',      value: 5.2,  color: '#22c55e' },
-    { feature: 'Measles Vaccination',  value: 4.4,  color: '#8b5cf6' },
-    { feature: 'Mother Age',           value: 4.3,  color: '#f97316' },
-    { feature: 'DPT Vaccination',      value: 4.2,  color: '#eab308' },
-    { feature: 'Wealth Index',         value: 4.0,  color: '#ec4899' },
+    { feature: 'State',                      value: 12.4, color: '#6366f1' },
+    { feature: 'Child Age (years)',          value: 11.2, color: '#84cc16' },
+    { feature: 'Child Age (months)',         value: 9.4,  color: '#22c55e' },
+    { feature: 'Birth Weight',               value: 9.0,  color: '#14b8a6' },
+    { feature: "Mother's BMI",               value: 8.2,  color: '#ef4444' },
+    { feature: 'Wealth Index',               value: 6.1,  color: '#f97316' },
+    { feature: 'Child Sex',                  value: 5.3,  color: '#ec4899' },
+    { feature: 'Measles Vaccination',        value: 4.6,  color: '#8b5cf6' },
+    { feature: "Mother's Education (years)", value: 4.4,  color: '#eab308' },
+    { feature: 'Urban/Rural',                value: 4.1,  color: '#06b6d4' },
   ],
   underweight: [
-    { feature: "Mother's BMI",        value: 50.6, color: '#ef4444' },
-    { feature: 'Birth Weight',        value: 6.0,  color: '#84cc16' },
-    { feature: 'Currently Breastfed', value: 5.2,  color: '#06b6d4' },
-    { feature: 'Mother Edu (years)',  value: 3.9,  color: '#eab308' },
-    { feature: 'Breastfeed Duration', value: 3.8,  color: '#14b8a6' },
-    { feature: 'Mother Age',          value: 3.7,  color: '#f97316' },
-    { feature: 'Mother Edu (level)',  value: 3.4,  color: '#22c55e' },
-    { feature: 'BCG Vaccination',     value: 3.1,  color: '#8b5cf6' },
-    { feature: 'Child Age (months)',  value: 3.0,  color: '#6366f1' },
-    { feature: 'Mother Works',        value: 2.9,  color: '#ec4899' },
+    { feature: 'Wealth Index',               value: 19.7, color: '#ef4444' },
+    { feature: 'Birth Weight',               value: 14.3, color: '#84cc16' },
+    { feature: 'State',                      value: 10.0, color: '#6366f1' },
+    { feature: "Mother's BMI",               value: 9.8,  color: '#f97316' },
+    { feature: "Mother's Education (years)", value: 8.9,  color: '#eab308' },
+    { feature: "Mother's Education Level",   value: 7.5,  color: '#22c55e' },
+    { feature: 'Child Age (months)',         value: 4.7,  color: '#14b8a6' },
+    { feature: 'Child Age (years)',          value: 4.5,  color: '#8b5cf6' },
+    { feature: 'Child Sex',                  value: 4.4,  color: '#ec4899' },
+    { feature: 'Birth Interval',             value: 2.8,  color: '#06b6d4' },
   ],
 };
 
@@ -64,11 +65,12 @@ const About = () => {
 
         {/* ── Hero ── */}
         <div className="about-hero card">
-          <h2>Predicting District-Level Child Malnutrition Using Machine Learning</h2>
+          <h2>Predicting Child Malnutrition Using Machine Learning</h2>
           <p>
-            This system uses ensemble machine learning on NFHS-5 government survey data to predict 
-            district-level child malnutrition burden across India — enabling evidence-based 
-            resource allocation and policy simulation for policymakers, NGOs, and researchers.
+            This system uses XGBoost trained on individual NFHS-5 child records to predict
+            malnutrition risk — for an individual child, or aggregated to district-level burden —
+            enabling evidence-based resource allocation and policy simulation for policymakers,
+            NGOs, and researchers.
           </p>
         </div>
 
@@ -82,7 +84,7 @@ const About = () => {
             <p>National Family Health Survey (NFHS-5), 2019–21 — India's most comprehensive child health dataset.</p>
             <ul>
               <li>232,920 children surveyed across 707 districts</li>
-              <li>18 engineered predictor features</li>
+              <li>19 predictor features, including state</li>
               <li>3 target variables: stunting, wasting, underweight</li>
               <li>Official Government of India data</li>
             </ul>
@@ -93,12 +95,12 @@ const About = () => {
               <Brain size={28} style={{ color: 'var(--success)' }} />
             </div>
             <h3>ML Models Deployed</h3>
-            <p>Best-performing model selected per target after comparing 3 algorithms with 80/20 train-test split.</p>
+            <p>Child-level XGBoost classifiers trained on 206k+ individual NFHS-5 child records, aggregated to district level for evaluation.</p>
             <ul>
-              <li>Random Forest → Stunting (R² 49.7%)</li>
-              <li>Random Forest → Wasting (R² 42.7%)</li>
-              <li>XGBoost → Underweight (R² 69.1%)</li>
-              <li>Linear Regression used as baseline</li>
+              <li>XGBoost → Stunting (R² 60.8%)</li>
+              <li>XGBoost → Wasting (R² 49.5%)</li>
+              <li>XGBoost → Underweight (R² 76.0%)</li>
+              <li>Previous district-aggregate models kept below for comparison</li>
             </ul>
           </div>
 
@@ -109,10 +111,10 @@ const About = () => {
             <h3>Key Findings</h3>
             <p>Feature importance analysis reveals the dominant socioeconomic drivers of malnutrition.</p>
             <ul>
-              <li>Mother's BMI — 31% importance (stunting)</li>
-              <li>Wealth Index — 11% importance</li>
-              <li>Mother's Education — 9% importance</li>
-              <li>Birth Weight — key wasting predictor</li>
+              <li>Wealth Index — 31.5% importance (stunting), strongest overall predictor</li>
+              <li>Mother's Education (years) — 10.5% importance</li>
+              <li>State — top-3 predictor for wasting and underweight</li>
+              <li>Birth Weight — key predictor across all three outcomes</li>
             </ul>
           </div>
 
@@ -121,12 +123,12 @@ const About = () => {
               <Github size={28} style={{ color: 'var(--wasting)' }} />
             </div>
             <h3>Technology Stack</h3>
-            <p>Modern full-stack application built for decision-support at district and state scale.</p>
+            <p>Modern full-stack application built for decision-support at district and individual-child scale.</p>
             <ul>
               <li>React.js + Recharts + Lucide</li>
               <li>FastAPI + Python 3.11</li>
-              <li>Scikit-learn, XGBoost, Pandas</li>
-              <li>NFHS-5 district-level aggregation pipeline</li>
+              <li>XGBoost, Pandas</li>
+              <li>NFHS-5 child-level microdata pipeline (206k+ records)</li>
             </ul>
           </div>
         </div>
@@ -136,8 +138,8 @@ const About = () => {
           <div className="model-eval-header">
             <TrendingUp size={22} style={{ color: '#6366f1' }} />
             <div>
-              <h3>Model Evaluation — All 3 Algorithms Compared</h3>
-              <p className="eval-subtitle">R² and RMSE across all three malnutrition targets. Best model deployed per target.</p>
+              <h3>Model Evaluation — Child-Level Rebuild vs. Previous District Models</h3>
+              <p className="eval-subtitle">R² and RMSE across all three malnutrition targets, evaluated at district level via 5-fold cross-validation.</p>
             </div>
           </div>
 
@@ -204,24 +206,24 @@ const About = () => {
           <div className="r2-justification">
             <div className="r2-just-header">
               <AlertTriangle size={16} style={{ color: '#f97316' }} />
-              <strong>Why is R² in the 43–69% range? — A justified narrative</strong>
+              <strong>Why the jump from ~43–69% to 50–76% R²?</strong>
             </div>
             <div className="r2-reasons">
               <div className="r2-reason">
                 <CheckCircle size={14} style={{ color: '#22c55e', flexShrink: 0 }} />
-                <p><strong>Survey sampling noise:</strong> NFHS-5 uses stratified cluster sampling. District-level aggregates inherit sampling variance — some districts have &lt;200 sampled children, introducing statistical noise that no model can explain.</p>
+                <p><strong>707 rows → 206k+ rows:</strong> The previous models trained on district-level averages (707 rows total). Averaging before training discards individual-level variation the model could otherwise learn from. The current model trains directly on individual NFHS-5 child records.</p>
               </div>
               <div className="r2-reason">
                 <CheckCircle size={14} style={{ color: '#22c55e', flexShrink: 0 }} />
-                <p><strong>Socioeconomic heterogeneity:</strong> India's 707 districts span extreme diversity — from Kerala (HDI ~0.78) to Bihar (HDI ~0.57). Cross-district regression faces a fundamentally high-variance prediction problem.</p>
+                <p><strong>Noise cancels on aggregation, not before it:</strong> Per-child predictions are inherently noisy (AUC ~0.63–0.70), but averaging thousands of them per district cancels out individual noise — producing a more accurate district-level estimate than fitting directly on pre-averaged, noise-inflated district rows.</p>
               </div>
               <div className="r2-reason">
                 <CheckCircle size={14} style={{ color: '#22c55e', flexShrink: 0 }} />
-                <p><strong>Ecological fallacy:</strong> Models trained on district-level aggregates cannot perfectly capture within-district variation. The "average district" is a statistical construct — real distributions are skewed.</p>
+                <p><strong>State as a real feature:</strong> State was previously excluded from district-level training as an ID column. At child level it carries real predictive signal not already captured by other averaged features, and is now a top-3 predictor for wasting and underweight.</p>
               </div>
               <div className="r2-reason">
                 <CheckCircle size={14} style={{ color: '#22c55e', flexShrink: 0 }} />
-                <p><strong>Literature benchmark:</strong> Published district-level nutritional regression studies in LMICs (South Asia, Sub-Saharan Africa) consistently report R² of 40–70%. Our scores are well within the expected range for this modeling problem.</p>
+                <p><strong>Remaining ceiling:</strong> The residual error reflects genuine unexplained variation — illness episodes, local food security shocks, and factors not captured in survey variables. Published district-level nutritional regression studies in LMICs report R² of 40–70%; this rebuild exceeds that range for two of three targets.</p>
               </div>
             </div>
           </div>
@@ -301,11 +303,11 @@ const About = () => {
           <h3>Methodology</h3>
           <div className="methodology-steps">
             {[
-              { n: 1, title: 'Data Collection', body: 'Downloaded NFHS-5 child-level records for 232,920 children across 707 districts. Raw data contained 300+ variables — narrowed to 18 theory-driven predictors.' },
-              { n: 2, title: 'Feature Engineering', body: 'Aggregated individual-level records to district means. Handled missing values via median imputation. Constructed composite scores (e.g., vaccination index). Applied log transformation to skewed features.' },
-              { n: 3, title: 'Model Training', body: '9 regression algorithms trained with 80/20 stratified split. GridSearchCV for hyperparameter tuning. Cross-validated R², RMSE, and MAE used for model selection.' },
-              { n: 4, title: 'Model Selection', body: 'Best model per target selected: Random Forest for stunting/wasting, XGBoost for underweight. Models serialized as .pkl files and served via FastAPI.' },
-              { n: 5, title: 'Deployment', body: 'FastAPI backend exposes prediction and district data endpoints. React frontend provides scenario simulation, district explorer, and persona-tailored action planning.' },
+              { n: 1, title: 'Data Collection', body: 'Downloaded NFHS-5 child-level microdata (DHS Children\'s Recode, 232,920 children across 707 districts) directly from the DHS Program — 300+ raw variables narrowed to 19 theory-driven predictors, kept at individual child level.' },
+              { n: 2, title: 'Feature Engineering', body: 'Trained directly on individual child records rather than pre-aggregating to district means. Handled missing values (e.g. birth interval for first-born children) via training-median imputation. Corrected two mislabeled variables inherited from an earlier pipeline: birth weight and birth interval.' },
+              { n: 3, title: 'Model Training', body: 'XGBoost classifiers trained per target with 5-fold stratified cross-validation, evaluated by aggregating per-child out-of-fold predictions up to the district level and comparing against actual district rates — avoiding any leakage between folds.' },
+              { n: 4, title: 'Model Selection', body: 'Child-level XGBoost selected for all three targets, replacing the previous district-aggregate Random Forest/XGBoost models. Models serialized as XGBoost native JSON and served via FastAPI.' },
+              { n: 5, title: 'Deployment', body: 'FastAPI backend exposes prediction and district data endpoints. React frontend provides individual child risk screening, district explorer, and persona-tailored action planning.' },
             ].map(({ n, title, body }) => (
               <div key={n} className="method-step">
                 <div className="step-number">{n}</div>

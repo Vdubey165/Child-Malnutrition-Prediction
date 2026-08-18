@@ -25,8 +25,8 @@ const Landing = () => {
           </h1>
           
           <p className="hero-subtitle">
-            Leveraging NFHS-5 data and advanced machine learning to predict 
-            district-level child malnutrition across India
+            Leveraging NFHS-5 child-level data and machine learning to predict 
+            malnutrition risk across India — for an individual child or aggregated to district level
           </p>
 
           <div className="hero-stats">
@@ -39,8 +39,8 @@ const Landing = () => {
               <div className="stat-label">Districts Covered</div>
             </div>
             <div className="hero-stat">
-              <div className="stat-number">69%</div>
-              <div className="stat-label">Prediction Accuracy</div>
+              <div className="stat-number">76%</div>
+              <div className="stat-label">Prediction Accuracy (Underweight)</div>
             </div>
           </div>
 
@@ -132,9 +132,9 @@ const Landing = () => {
               <h2 className="section-title">Machine Learning for Public Health</h2>
               
               <p className="solution-text">
-                This system uses advanced machine learning models trained on NFHS-5 data to 
-                predict malnutrition rates at the district level, enabling targeted interventions 
-                and resource allocation.
+                This system uses XGBoost models trained on 206k+ individual NFHS-5 child records to 
+                predict malnutrition risk — for an individual child, or aggregated to district level, 
+                enabling targeted interventions and resource allocation.
               </p>
 
               <div className="solution-features">
@@ -142,7 +142,7 @@ const Landing = () => {
                   <div className="feature-icon">✓</div>
                   <div>
                     <h4>Predictive Analytics</h4>
-                    <p>Random Forest and XGBoost models achieving up to 69% accuracy</p>
+                    <p>Child-level XGBoost models achieving up to 76% district-level accuracy</p>
                   </div>
                 </div>
 

@@ -19,11 +19,14 @@ const getRiskLevel = (score) => {
 const RISK_COLORS = { High: '#ef4444', Medium: '#f97316', Low: '#22c55e' };
 const RISK_BG     = { High: '#fef2f2', Medium: '#fff7ed', Low: '#f0fdf4' };
 
-// Model performance data (from notebooks — all 9 models)
+// Model performance data — child-level XGBoost classifiers (v2), aggregated
+// to district level for evaluation. Replaces the old 707-row district
+// regression models (kept below for comparison).
 const MODEL_METRICS = [
-  { model: 'Random Forest',    stunting: 49.7, wasting: 42.7, underweight: 67.7, best: true  },
-  { model: 'XGBoost',          stunting: 43.1, wasting: 36.4, underweight: 69.1, best: true  },
-  { model: 'Linear Regression',stunting: 43.6, wasting: 36.0, underweight: 64.3, best: false },
+  { model: 'Child-level XGBoost (current)', stunting: 60.8, wasting: 49.5, underweight: 76.0, best: true  },
+  { model: 'District-aggregate RF (previous)',    stunting: 49.7, wasting: 42.7, underweight: 67.7, best: false },
+  { model: 'District-aggregate XGBoost (previous)', stunting: 43.1, wasting: 36.4, underweight: 69.1, best: false },
+  { model: 'District-aggregate Linear Reg (previous)', stunting: 43.6, wasting: 36.0, underweight: 64.3, best: false },
 ];
 
 const Dashboard = () => {
@@ -185,7 +188,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <h4>Underweight — Combined</h4>
-                  <p>32.1% underweight. XGBoost achieves 69% R² predicting this — strongest model signal.</p>
+                  <p>32.1% underweight. Child-level model achieves 76% R² at district level — strongest signal, up from 69%.</p>
                 </div>
               </div>
             </div>
@@ -257,9 +260,9 @@ const Dashboard = () => {
             <div>
               <h3 className="model-eval-header">
                 <TrendingUp size={22} style={{ color: '#6366f1' }} />
-                Model Evaluation — 3 Algorithms Compared
+                Model Evaluation — Child-Level Rebuild vs. Previous District Models
               </h3>
-              <p className="eval-subtitle">R² and RMSE across all three malnutrition targets. Best model deployed per target.</p>
+              <p className="eval-subtitle">R² across all three malnutrition targets, evaluated at district level via 5-fold cross-validation. Current model trained on 206k+ individual NFHS-5 child records; previous models trained on 707 pre-aggregated district rows.</p>
             </div>
 
           <div className="model-table-wrap">
@@ -311,10 +314,13 @@ const Dashboard = () => {
           </div>
 
           <div className="model-perf-note">
-            <strong>Why 43–69% R²?</strong> District-level regression on survey data has inherent ceiling — 
-            NFHS-5 sampling noise, socioeconomic variability across 707 districts, and ecological fallacy 
-            constraints (aggregated data masks individual-level variation). These scores are consistent with 
-            published literature on district-level nutritional modeling in LMICs.
+            <strong>Why the jump from ~43–69% to 50–76% R²?</strong> The previous models trained on only
+            707 pre-aggregated district rows, which discards individual-level variation and caps
+            achievable accuracy. The current model trains on 206k+ individual NFHS-5 child records, then
+            aggregates per-child predictions to the district level — averaging cancels out individual
+            noise that the old approach couldn't recover from. Remaining error reflects genuine
+            unexplained variation: illness episodes, local food security shocks, and factors not captured
+            in survey variables.
           </div>
         </div>
 
