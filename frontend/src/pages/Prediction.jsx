@@ -4,45 +4,59 @@ import Header from '../components/Header';
 import { predictMalnutrition } from '../services/api';
 import './Prediction.css';
 
-// ─── Feature importance from actual model outputs (notebook) ───
+// ─── Feature importance from actual model outputs (child-level XGBoost, v2) ───
 const FEATURE_IMPORTANCE = {
   stunting: [
-    { label: "Mother's BMI",        value: 31.0, color: '#ef4444' },
-    { label: 'Wealth Index',        value: 10.9, color: '#f97316' },
-    { label: 'Mother Edu (years)',  value: 8.7,  color: '#eab308' },
-    { label: 'Birth Weight',        value: 8.5,  color: '#84cc16' },
-    { label: 'Mother Edu (level)',  value: 7.4,  color: '#22c55e' },
-    { label: 'BCG Vaccination',     value: 3.7,  color: '#14b8a6' },
-    { label: 'Female-headed HH',    value: 3.6,  color: '#6366f1' },
-    { label: 'Measles Vaccination', value: 3.5,  color: '#8b5cf6' },
-    { label: 'Child Sex',           value: 3.5,  color: '#ec4899' },
-    { label: 'DPT Vaccination',     value: 3.3,  color: '#06b6d4' },
+    { label: 'Wealth Index',               value: 31.5, color: '#ef4444' },
+    { label: "Mother's Education (years)", value: 10.5, color: '#f97316' },
+    { label: "Mother's Education Level",   value: 9.0,  color: '#eab308' },
+    { label: 'Child Age (years)',          value: 8.4,  color: '#84cc16' },
+    { label: 'Child Age (months)',         value: 6.7,  color: '#22c55e' },
+    { label: 'Birth Weight',               value: 6.4,  color: '#14b8a6' },
+    { label: 'State',                      value: 5.0,  color: '#6366f1' },
+    { label: "Mother's BMI",               value: 3.9,  color: '#8b5cf6' },
+    { label: 'Child Sex',                  value: 3.5,  color: '#ec4899' },
+    { label: 'Birth Interval',             value: 3.2,  color: '#06b6d4' },
   ],
   wasting: [
-    { label: "Mother's BMI",         value: 28.2, color: '#ef4444' },
-    { label: 'Female-headed HH',     value: 9.5,  color: '#6366f1' },
-    { label: 'Birth Weight',         value: 9.3,  color: '#84cc16' },
-    { label: 'Breastfeed Duration',  value: 6.7,  color: '#14b8a6' },
-    { label: 'Currently Breastfed',  value: 6.4,  color: '#06b6d4' },
-    { label: 'BCG Vaccination',      value: 5.2,  color: '#22c55e' },
-    { label: 'Measles Vaccination',  value: 4.4,  color: '#8b5cf6' },
-    { label: 'Mother Age',           value: 4.3,  color: '#f97316' },
-    { label: 'DPT Vaccination',      value: 4.2,  color: '#eab308' },
-    { label: 'Wealth Index',         value: 4.0,  color: '#ec4899' },
+    { label: 'State',                      value: 12.4, color: '#6366f1' },
+    { label: 'Child Age (years)',          value: 11.2, color: '#84cc16' },
+    { label: 'Child Age (months)',         value: 9.4,  color: '#22c55e' },
+    { label: 'Birth Weight',               value: 9.0,  color: '#14b8a6' },
+    { label: "Mother's BMI",               value: 8.2,  color: '#ef4444' },
+    { label: 'Wealth Index',               value: 6.1,  color: '#f97316' },
+    { label: 'Child Sex',                  value: 5.3,  color: '#ec4899' },
+    { label: 'Measles Vaccination',        value: 4.6,  color: '#8b5cf6' },
+    { label: "Mother's Education (years)", value: 4.4,  color: '#eab308' },
+    { label: 'Urban/Rural',                value: 4.1,  color: '#06b6d4' },
   ],
   underweight: [
-    { label: "Mother's BMI",        value: 50.6, color: '#ef4444' },
-    { label: 'Birth Weight',        value: 6.0,  color: '#84cc16' },
-    { label: 'Currently Breastfed', value: 5.2,  color: '#06b6d4' },
-    { label: 'Mother Edu (years)',  value: 3.9,  color: '#eab308' },
-    { label: 'Breastfeed Duration', value: 3.8,  color: '#14b8a6' },
-    { label: 'Mother Age',          value: 3.7,  color: '#f97316' },
-    { label: 'Mother Edu (level)',  value: 3.4,  color: '#22c55e' },
-    { label: 'BCG Vaccination',     value: 3.1,  color: '#8b5cf6' },
-    { label: 'Child Age (months)',  value: 3.0,  color: '#6366f1' },
-    { label: 'Mother Works',        value: 2.9,  color: '#ec4899' },
+    { label: 'Wealth Index',               value: 19.7, color: '#ef4444' },
+    { label: 'Birth Weight',               value: 14.3, color: '#84cc16' },
+    { label: 'State',                      value: 10.0, color: '#6366f1' },
+    { label: "Mother's BMI",               value: 9.8,  color: '#f97316' },
+    { label: "Mother's Education (years)", value: 8.9,  color: '#eab308' },
+    { label: "Mother's Education Level",   value: 7.5,  color: '#22c55e' },
+    { label: 'Child Age (months)',         value: 4.7,  color: '#14b8a6' },
+    { label: 'Child Age (years)',          value: 4.5,  color: '#8b5cf6' },
+    { label: 'Child Sex',                  value: 4.4,  color: '#ec4899' },
+    { label: 'Birth Interval',             value: 2.8,  color: '#06b6d4' },
   ],
 };
+
+// NFHS-5 state codes the model was trained on
+const STATE_OPTIONS = [
+  [1,'Jammu & Kashmir'],[2,'Himachal Pradesh'],[3,'Punjab'],[4,'Chandigarh'],
+  [5,'Uttarakhand'],[6,'Haryana'],[7,'NCT of Delhi'],[8,'Rajasthan'],
+  [9,'Uttar Pradesh'],[10,'Bihar'],[11,'Sikkim'],[12,'Arunachal Pradesh'],
+  [13,'Nagaland'],[14,'Manipur'],[15,'Mizoram'],[16,'Tripura'],
+  [17,'Meghalaya'],[18,'Assam'],[19,'West Bengal'],[20,'Jharkhand'],
+  [21,'Odisha'],[22,'Chhattisgarh'],[23,'Madhya Pradesh'],[24,'Gujarat'],
+  [25,'Dadra & Nagar Haveli and Daman & Diu'],[27,'Maharashtra'],
+  [28,'Andhra Pradesh'],[29,'Karnataka'],[30,'Goa'],[31,'Lakshadweep'],
+  [32,'Kerala'],[33,'Tamil Nadu'],[34,'Puducherry'],
+  [35,'Andaman & Nicobar Islands'],[36,'Telangana'],[37,'Ladakh'],
+];
 
 // ─── Persona-aware action plans ───
 const ACTION_PLANS = {
@@ -130,14 +144,18 @@ const Prediction = () => {
     female_headed_hh: 1,
     child_age_months: 30,
     child_sex: 1,
-    birth_interval: 2,
+    child_age_years: 2,
+    birth_interval: 32,
     birth_weight: 2800,
-    breastfeed_duration: 70,
-    currently_breastfeed: 3500,
+    breastfeed_duration: 12,
     bcg_vaccination: 1,
     dpt_vaccination: 1,
-    measles_vaccination: 1.5,
+    measles_vaccination: 1,
+    knows_ors: 1,
+    urban_rural: 2,
+    state: 9,
   });
+  const [firstBorn, setFirstBorn] = useState(false);
 
   const [prediction, setPrediction]   = useState(null);
   const [loading, setLoading]         = useState(false);
@@ -157,7 +175,8 @@ const Prediction = () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await predictMalnutrition(formData);
+      const payload = { ...formData, birth_interval: firstBorn ? null : formData.birth_interval };
+      const result = await predictMalnutrition(payload);
       setPrediction(result);
     } catch (err) {
       setError('Prediction failed — please check your inputs and try again.');
@@ -181,10 +200,10 @@ const Prediction = () => {
   // Highlight which features are most impactful given current inputs
   const getInputRiskFlags = () => {
     const flags = [];
-    if (formData.mother_bmi < 1850) flags.push('Mother BMI is low — strongest predictor of stunting');
-    if (formData.wealth_index <= 2)  flags.push('Low wealth index — significantly elevates all malnutrition risk');
+    if (formData.wealth_index <= 2)  flags.push('Low wealth index — strongest predictor across all three outcomes');
+    if (formData.mother_bmi < 1850)  flags.push('Mother BMI is low — elevates wasting and underweight risk');
     if (formData.mother_edu_years < 5) flags.push('Low maternal education — linked to poorer feeding practices');
-    if (formData.birth_weight < 2500) flags.push('Low birth weight — direct risk factor for wasting');
+    if (formData.birth_weight < 2500) flags.push('Low birth weight — strong risk factor for underweight');
     if (formData.bcg_vaccination < 1) flags.push('Incomplete BCG vaccination — reduces immunity, worsens nutritional outcomes');
     return flags;
   };
@@ -195,7 +214,7 @@ const Prediction = () => {
     <div className="prediction-page">
       <Header
         title="Malnutrition Risk Estimator"
-        subtitle="Simulate socioeconomic profiles to estimate district-level malnutrition burden"
+        subtitle="Estimate an individual child's malnutrition risk from their household and health profile"
       />
 
       <div className="page-container fade-in">
@@ -212,18 +231,23 @@ const Prediction = () => {
           {showContext && (
             <div className="context-banner-body">
               <p>
-                This tool operates at the <strong>district-aggregate level</strong>. The inputs below represent
-                the <em>typical (average) profile</em> of mothers and children within a district — not a single individual.
-                For example, "Mother's BMI" reflects the average BMI of mothers in that area.
+                This tool operates at the <strong>individual child level</strong>. The inputs below describe
+                one specific child and their mother/household — not a district average.
               </p>
               <p>
-                The model was trained on NFHS-5 district-level aggregates. By adjusting these sliders you are
-                performing <strong>scenario simulation</strong> — asking: "If a district had these aggregate
-                characteristics, what malnutrition burden would we predict?"
+                The model was trained on 200k+ individual child records from NFHS-5 (India's national health
+                survey), so a single child's profile drives the prediction directly, rather than an averaged
+                district profile.
               </p>
               <p>
-                This enables <strong>policy planning, resource allocation, and what-if analysis</strong>
-                — not individual clinical diagnosis.
+                To estimate a district or region's overall burden, run this for a representative sample of
+                children from that area and average the results — that's how the underlying model itself
+                was validated at the district level.
+              </p>
+              <p>
+                This enables <strong>individual risk screening as well as policy planning and resource
+                allocation</strong> when aggregated — but predictions are probabilistic estimates, not
+                clinical diagnoses.
               </p>
             </div>
           )}
@@ -260,79 +284,134 @@ const Prediction = () => {
         <div className="prediction-grid">
           {/* ── Form ── */}
           <div className="form-section card">
-            <h3 className="form-title">District Profile Inputs</h3>
+            <h3 className="form-title">Child Profile Inputs</h3>
 
             <div className="form-group-section">
-              <h4 className="group-title">👩 Maternal Characteristics (District Avg)</h4>
+              <h4 className="group-title">📍 Location</h4>
               <div className="form-group">
-                <label>Avg Wealth Index (1–5)</label>
-                <input type="number" name="wealth_index" min="1" max="5" step="1" value={formData.wealth_index} onChange={handleChange} />
-                <span className="help-text">1 = Poorest quintile, 5 = Richest quintile</span>
+                <label>State</label>
+                <select name="state" value={formData.state} onChange={handleChange}>
+                  {STATE_OPTIONS.map(([code, name]) => (
+                    <option key={code} value={code}>{name}</option>
+                  ))}
+                </select>
+                <span className="help-text"><strong>Top-3 predictor for wasting and underweight</strong></span>
               </div>
               <div className="form-group">
-                <label>Avg Mother's Age (years)</label>
+                <label>Area Type</label>
+                <select name="urban_rural" value={formData.urban_rural} onChange={handleChange}>
+                  <option value="1">Urban</option>
+                  <option value="2">Rural</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="form-group-section">
+              <h4 className="group-title">👩 Maternal Characteristics</h4>
+              <div className="form-group">
+                <label>Household Wealth Index (1–5)</label>
+                <input type="number" name="wealth_index" min="1" max="5" step="1" value={formData.wealth_index} onChange={handleChange} />
+                <span className="help-text">1 = Poorest quintile, 5 = Richest quintile | <strong>Strongest overall predictor</strong></span>
+              </div>
+              <div className="form-group">
+                <label>Mother's Age (years)</label>
                 <input type="number" name="mother_age" min="15" max="49" value={formData.mother_age} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Avg Mother's Education (years)</label>
-                <input type="number" name="mother_edu_years" min="0" max="15" value={formData.mother_edu_years} onChange={handleChange} />
+                <label>Mother's Education (years)</label>
+                <input type="number" name="mother_edu_years" min="0" max="20" value={formData.mother_edu_years} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Avg Mother's BMI (×100)</label>
-                <input type="number" name="mother_bmi" min="1000" max="4000" step="50" value={formData.mother_bmi} onChange={handleChange} />
-                <span className="help-text">Normal range: 1850–2500 | <strong>Strongest predictor (31% importance)</strong></span>
+                <label>Mother's Education Level</label>
+                <select name="mother_edu_level" value={formData.mother_edu_level} onChange={handleChange}>
+                  <option value="0">No education</option>
+                  <option value="1">Primary</option>
+                  <option value="2">Secondary</option>
+                  <option value="3">Higher</option>
+                </select>
               </div>
               <div className="form-group">
-                <label>% Mothers Employed</label>
+                <label>Mother's BMI (×100)</label>
+                <input type="number" name="mother_bmi" min="1200" max="6000" step="50" value={formData.mother_bmi} onChange={handleChange} />
+                <span className="help-text">Normal range: 1850–2500</span>
+              </div>
+              <div className="form-group">
+                <label>Mother Currently Working?</label>
                 <select name="mother_works" value={formData.mother_works} onChange={handleChange}>
-                  <option value="0">Majority not employed</option>
-                  <option value="1">Majority employed</option>
+                  <option value="0">No</option>
+                  <option value="1">Yes</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Head of Household</label>
+                <select name="female_headed_hh" value={formData.female_headed_hh} onChange={handleChange}>
+                  <option value="1">Male</option>
+                  <option value="2">Female</option>
                 </select>
               </div>
             </div>
 
             <div className="form-group-section">
-              <h4 className="group-title">👶 Child Profile (District Avg)</h4>
+              <h4 className="group-title">👶 Child Profile</h4>
               <div className="form-group">
-                <label>Avg Child Age (months)</label>
+                <label>Child Age (months)</label>
                 <input type="number" name="child_age_months" min="0" max="59" value={formData.child_age_months} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Child Sex Ratio (1=M, 2=F avg)</label>
+                <label>Child Age (years, rounded)</label>
+                <input type="number" name="child_age_years" min="0" max="4" value={formData.child_age_years} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Child's Sex</label>
                 <select name="child_sex" value={formData.child_sex} onChange={handleChange}>
-                  <option value="1">Majority Male</option>
-                  <option value="2">Majority Female</option>
+                  <option value="1">Male</option>
+                  <option value="2">Female</option>
                 </select>
               </div>
               <div className="form-group">
-                <label>Avg Birth Weight (grams)</label>
-                <input type="number" name="birth_weight" min="400" max="5000" step="100" value={formData.birth_weight} onChange={handleChange} />
+                <label>Birth Weight (grams)</label>
+                <input type="number" name="birth_weight" min="500" max="5850" step="50" value={formData.birth_weight} onChange={handleChange} />
                 <span className="help-text">Below 2500g = low birth weight risk zone</span>
               </div>
               <div className="form-group">
-                <label>Avg Birth Interval (years)</label>
-                <input type="number" name="birth_interval" min="1" max="5" step="0.1" value={formData.birth_interval} onChange={handleChange} />
+                <label>
+                  <input type="checkbox" checked={firstBorn} onChange={(e) => setFirstBorn(e.target.checked)} style={{ marginRight: 6 }} />
+                  First-born child (no preceding birth)
+                </label>
               </div>
+              {!firstBorn && (
+                <div className="form-group">
+                  <label>Birth Interval (months since previous sibling)</label>
+                  <input type="number" name="birth_interval" min="5" max="280" value={formData.birth_interval} onChange={handleChange} />
+                </div>
+              )}
             </div>
 
             <div className="form-group-section">
-              <h4 className="group-title">💉 Healthcare & Nutrition Coverage</h4>
+              <h4 className="group-title">💉 Healthcare & Nutrition</h4>
               <div className="form-group">
-                <label>Avg Breastfeeding Duration (months)</label>
+                <label>Breastfeeding Duration (months)</label>
                 <input type="number" name="breastfeed_duration" min="0" max="90" value={formData.breastfeed_duration} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>BCG Vaccination Coverage</label>
-                <input type="number" name="bcg_vaccination" min="0" max="2" step="0.1" value={formData.bcg_vaccination} onChange={handleChange} />
-                <span className="help-text">0 = None, 1 = Partial, 2 = Full coverage</span>
+                <label>Mother Knows About ORS?</label>
+                <select name="knows_ors" value={formData.knows_ors} onChange={handleChange}>
+                  <option value="0">No</option>
+                  <option value="1">Yes</option>
+                </select>
               </div>
               <div className="form-group">
-                <label>DPT Vaccination Coverage</label>
-                <input type="number" name="dpt_vaccination" min="0" max="2" step="0.1" value={formData.dpt_vaccination} onChange={handleChange} />
+                <label>BCG Vaccination</label>
+                <input type="number" name="bcg_vaccination" min="0" max="3" step="1" value={formData.bcg_vaccination} onChange={handleChange} />
+                <span className="help-text">0 = None, 1 = Vaccination card, 2 = Mother's report</span>
               </div>
               <div className="form-group">
-                <label>Measles Vaccination Coverage</label>
-                <input type="number" name="measles_vaccination" min="0" max="3" step="0.1" value={formData.measles_vaccination} onChange={handleChange} />
+                <label>DPT Vaccination</label>
+                <input type="number" name="dpt_vaccination" min="0" max="3" step="1" value={formData.dpt_vaccination} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Measles Vaccination</label>
+                <input type="number" name="measles_vaccination" min="0" max="3" step="1" value={formData.measles_vaccination} onChange={handleChange} />
               </div>
             </div>
 
@@ -413,8 +492,8 @@ const Prediction = () => {
                     <div className="explain-body">
                       <div className="explain-tabs">
                         {[
-                          { key: 'stunting',    label: 'Stunting',    model: 'RF' },
-                          { key: 'wasting',     label: 'Wasting',     model: 'RF' },
+                          { key: 'stunting',    label: 'Stunting',    model: 'XGB' },
+                          { key: 'wasting',     label: 'Wasting',     model: 'XGB' },
                           { key: 'underweight', label: 'Underweight', model: 'XGB' },
                         ].map(({ key, label, model }) => (
                           <button
@@ -429,9 +508,7 @@ const Prediction = () => {
                         ))}
                       </div>
                       <p className="explain-subtitle">
-                        {activeExplain === 'underweight'
-                          ? 'Feature importance — XGBoost underweight model'
-                          : `Feature importance — Random Forest ${activeExplain} model`}
+                        Feature importance — XGBoost {activeExplain} model (child-level)
                       </p>
                       {FEATURE_IMPORTANCE[activeExplain].map((f) => (
                         <div key={f.label} className="fi-row">
@@ -479,10 +556,11 @@ const Prediction = () => {
                 <div className="card transparency-note">
                   <BookOpen size={16} style={{ color: 'var(--text-secondary)' }} />
                   <p>
-                    <strong>Model transparency:</strong> RF for stunting/wasting (R² 43–50%), 
-                    XGBoost for underweight (R² 69%). Variability explained by socioeconomic noise 
-                    and NFHS-5 survey sampling design. Predictions represent probabilistic estimates,
-                    not clinical diagnoses.
+                    <strong>Model transparency:</strong> Child-level XGBoost classifiers trained on
+                    206k–210k individual NFHS-5 child records. Aggregated to district level, the models
+                    explain R² 61% (stunting), 50% (wasting), and 76% (underweight) of district-to-district
+                    variation — a large improvement over the previous district-aggregate model. Individual
+                    predictions remain probabilistic estimates, not clinical diagnoses.
                   </p>
                 </div>
 

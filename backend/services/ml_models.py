@@ -3,9 +3,13 @@ ML model loading service.
 Models are loaded once at startup and held in memory.
 If a model file is missing the app stays alive and returns 503
 from prediction endpoints rather than crashing entirely.
+
+v2: models are now child-level XGBoost classifiers saved in XGBoost's
+native JSON format (not pickled sklearn/xgboost objects), so loading
+uses xgb.XGBClassifier().load_model() instead of pickle.load().
 """
 import logging
-import pickle
+import xgboost as xgb
 
 from config import MODEL_STUNTING, MODEL_WASTING, MODEL_UNDERWEIGHT
 
@@ -26,9 +30,9 @@ def load_models():
     global _models, models_ready, models_error
 
     required = {
-        "rf_stunting":     MODEL_STUNTING,
-        "rf_wasting":      MODEL_WASTING,
-        "xgb_underweight": MODEL_UNDERWEIGHT,
+        "stunting":    MODEL_STUNTING,
+        "wasting":     MODEL_WASTING,
+        "underweight": MODEL_UNDERWEIGHT,
     }
 
     loaded = {}
@@ -40,8 +44,9 @@ def load_models():
             models_ready = False
             return
         try:
-            with open(path, "rb") as f:
-                loaded[key] = pickle.load(f)
+            model = xgb.XGBClassifier()
+            model.load_model(str(path))
+            loaded[key] = model
             logger.info("Loaded model: %s", path.name)
         except Exception as e:
             msg = f"Failed to load {path.name}: {e}"
