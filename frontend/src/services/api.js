@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL
-  || 'https://child-malnutrition-prediction-api.onrender.com';
+  || 'https://childmal-backend-1023489696573.asia-south1.run.app';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

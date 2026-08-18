@@ -1,9 +1,9 @@
 # 🩺 Child Malnutrition Prediction
 
-A full-stack ML web application for predicting child malnutrition rates across Indian districts using NFHS-5 data. Supports both individual-level prediction (stunting, wasting, underweight) and district-level analytics across all 707 districts.
+A full-stack ML web application predicting child malnutrition risk across India using NFHS-5 data. Supports both **individual child-level prediction** (stunting, wasting, underweight) and **district-level analytics** across all 707 districts.
 
-**Live Demo:** [child-malnutrition-prediction.vercel.app](https://child-malnutrition-prediction.vercel.app)  
-**API:** [child-malnutrition-prediction-api.onrender.com](https://child-malnutrition-prediction-api.onrender.com)
+**Live Demo:** [child-malnutrition-prediction.vercel.app](https://child-malnutrition-prediction.vercel.app)
+**API:** [childmal-backend-1023489696573.asia-south1.run.app](https://childmal-backend-1023489696573.asia-south1.run.app)
 
 ---
 
@@ -11,41 +11,43 @@ A full-stack ML web application for predicting child malnutrition rates across I
 
 **Landing Page**
 ![Landing Page](screenshots/landing.png)
-> 232,920 children analyzed · 707 districts covered · 69% prediction accuracy (R² underweight)
+> 232,920 children analyzed · 707 districts covered · 76% prediction accuracy (R² underweight, child-level model)
 
 **Dashboard — National Overview**
 ![Dashboard](screenshots/dashboard.png)
-> National averages: Stunting 29.7% · Wasting 15.9% · Underweight 26.6% · District risk distribution across 707 districts
+> National averages: Stunting 33.6% · Wasting 18.5% · Underweight 29.5% · District risk distribution across 707 districts
 
 **District Explorer**
 ![Districts](screenshots/districts.png)
-> Browse and filter all 707 districts by composite risk score. High-risk districts (119) flagged with stunting, wasting, and underweight rates.
+> Browse and filter all 707 districts by composite risk score, ranked by stunting, wasting, and underweight rates.
 
 **Malnutrition Risk Estimator**
 ![Prediction](screenshots/prediction.png)
-> Input a district socioeconomic profile to get predicted stunting, wasting, and underweight rates with risk classification vs national average.
+> Input an individual child's profile (mother's characteristics, birth history, vaccination status, state) to get predicted risk with classification vs national average.
 
 **Feature Importance Analysis**
 ![Feature Importance](screenshots/feature-importance.png)
-> Mother's BMI (31%) is the dominant predictor for stunting, followed by Wealth Index (10.9%) and Mother's Education (8.7%).
+> Wealth Index (31.5%) is the dominant predictor for stunting, followed by Mother's Education (10.5%) and Child Age (8.4%). State is a top-3 predictor for wasting and underweight.
 
 **About — Model Evaluation**
 ![About](screenshots/about.png)
-> R² and RMSE comparison across all 3 algorithms per malnutrition target.
+> R² comparison: current child-level model vs. previous district-aggregate models.
 
 ---
 
 ## 🧠 ML Models
 
-Three models were trained per malnutrition target — Linear Regression (baseline), Random Forest, and XGBoost — with the best selected per outcome by test R²:
+**v2 (current):** A single XGBoost classifier per target, trained on **232,920 individual NFHS-5 child records** (not pre-aggregated district means). Evaluated by generating out-of-fold per-child predictions via 5-fold cross-validation, then aggregating those predictions to the district level for comparison against actual district rates.
 
-| Target | Best Model | Notes |
+| Target | R² (district-level, 5-fold CV) | Previous (district-aggregate) |
 |---|---|---|
-| Stunting | Random Forest | `random_forest_stunting.pkl` |
-| Wasting | Random Forest | `random_forest_wasting.pkl` |
-| Underweight | XGBoost | `xgboost_underweight.pkl` |
+| Stunting | **0.608** | 0.478 |
+| Wasting | **0.495** | 0.343 |
+| Underweight | **0.760** | 0.598 |
 
-**16 input features** (district-level averages from NFHS-5): wealth index, mother's education level & years, mother's age & BMI, mother employment status, female-headed household, child age/sex, birth interval, birth weight, breastfeeding duration, BCG/DPT/Measles vaccination status.
+Full history and reasoning: see [`Notebook/03_child_level_model_rebuild.ipynb`](Notebook/03_child_level_model_rebuild.ipynb).
+
+**19 input features** (individual child/household level): wealth index, mother's education level & years, mother's age & BMI, mother employment status, household head sex, child age (months & years), child sex, birth interval, birth weight, breastfeeding duration, BCG/DPT/Measles vaccination status, knowledge of ORS, urban/rural, and **state** (added in v2 — a top-3 predictor for wasting and underweight that the previous pipeline excluded).
 
 **WHO z-score thresholds used:** height-for-age, weight-for-height, and weight-for-age z-scores < −2 SD define stunting, wasting, and underweight respectively.
 
@@ -53,19 +55,25 @@ Three models were trained per malnutrition target — Linear Regression (baselin
 - Stunting / Underweight: Low < 20% · Medium < 35% · High ≥ 35%
 - Wasting: Low < 10% · Medium < 20% · High ≥ 20%
 
+> ⚠️ **Two data bugs fixed in v2:** the earlier pipeline's `birth_weight` field
+> actually read the *mother's* weight (DHS variable `v437`), and
+> `birth_interval` actually read the child's *current age* (`b8`) rather than
+> the true preceding birth interval (`b11`). Both corrected — see the
+> rebuild notebook for details.
+
 ---
 
 ## 📓 Notebooks
 
-The `Notebook/` directory contains the full ML pipeline:
+The `Notebook/` directory contains the full ML pipeline history:
 
-| Notebook | Purpose |
-|---|---|
-| `Data_exploration.ipynb` | Loads NFHS-5 Stata files, cleans DHS missing codes, computes malnutrition flags using WHO z-score thresholds (z < -2), aggregates to district level, exports processed CSVs and district name mappings |
-| `02_feature_engineering_and_modeling.ipynb` | Trains Linear Regression, Random Forest, and XGBoost for all 3 targets; runs hyperparameter tuning; saves `.pkl` models and district/state prediction CSVs |
-| `Feature-Engineering.ipynb` | Placeholder — feature engineering is handled inside the two notebooks above |
+| Notebook | Status | Purpose |
+|---|---|---|
+| `03_child_level_model_rebuild.ipynb` | **Current** | Parses raw NFHS-5 child-level microdata (DHS flat ASCII format), trains and evaluates the deployed XGBoost models, exports district-level predictions |
+| `Data_exploration.ipynb` | Archived | Original district-aggregation pipeline (superseded — see deprecation notice in the notebook) |
+| `02_feature_engineering_and_modeling.ipynb` | Archived | Original 9-algorithm district-level model comparison (superseded — see deprecation notice in the notebook) |
 
-> **Note:** `Data/Raw/*.DTA` (NFHS-5 Stata files) are not included in the repo. To re-run `Data_exploration.ipynb`, place `Children.DTA`, `Household.DTA`, and `Individuals.DTA` in `Data/Raw/`. The processed outputs are already included so the app runs without them.
+> **Note:** `Data/Raw/IAKR7EFL.*` (NFHS-5 Children's Recode, DHS flat ASCII format) is not included in this repo per DHS Program data-use terms. To re-run `03_child_level_model_rebuild.ipynb`, register at [dhsprogram.com](https://dhsprogram.com), request the India NFHS-5 (2019–21) dataset, and download the Children's Recode in "Flat ASCII data (.dat)" format into `Data/Raw/`. The processed outputs and trained models are already included so the app runs without them.
 
 ---
 
@@ -75,12 +83,12 @@ The `Notebook/` directory contains the full ML pipeline:
 child-malnutrition/
 ├── backend/
 │   ├── main.py                      # FastAPI entry point
-│   ├── config.py                    # All paths and constants
+│   ├── config.py                    # All paths, model files, state code mapping
 │   ├── models/
-│   │   └── schemas.py               # Pydantic request/response schemas
+│   │   └── schemas.py               # Pydantic request/response schemas (child-level input)
 │   ├── services/
 │   │   ├── district_mapping.py      # District & state name enrichment
-│   │   ├── ml_models.py             # Model loading (graceful 503 on failure)
+│   │   ├── ml_models.py             # XGBoost model loading (graceful 503 on failure)
 │   │   └── district_data.py         # District CSV loading
 │   ├── routers/
 │   │   ├── prediction.py            # POST /api/predict
@@ -90,20 +98,23 @@ child-malnutrition/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   ├── pages/
+│   │   ├── pages/                   # Landing, Dashboard, DistrictExplorer, Prediction, About
 │   │   ├── services/
+│   │   │   └── api.js               # Live backend calls (predict) + static bundled district data (dashboard/explorer)
+│   │   ├── data/
+│   │   │   └── districtData.json    # Pre-built district snapshot bundled at build time — regenerate from Data/Processed/ when data changes
 │   │   └── App.js
 │   └── package.json
 ├── Notebook/
-│   ├── Data_exploration.ipynb
-│   ├── 02_feature_engineering_and_modeling.ipynb
-│   └── Feature-Engineering.ipynb
+│   ├── 03_child_level_model_rebuild.ipynb   # Current pipeline
+│   ├── Data_exploration.ipynb               # Archived
+│   └── 02_feature_engineering_and_modeling.ipynb  # Archived
 ├── Models/
-│   ├── random_forest_stunting.pkl
-│   ├── random_forest_wasting.pkl
-│   └── xgboost_underweight.pkl
+│   ├── final_model_stunting.json    # Child-level XGBoost (native JSON format)
+│   ├── final_model_wasting.json
+│   └── final_model_underweight.json
 ├── Data/
-│   ├── Raw/                         # NFHS-5 Stata files (not in repo)
+│   ├── Raw/                         # NFHS-5 DHS flat ASCII files (not in repo — see Notebooks section)
 │   └── Processed/
 │       ├── district_malnutrition_enhanced.csv
 │       ├── district_predictions_all_types.csv
@@ -112,8 +123,10 @@ child-malnutrition/
 │       └── state_level_summary.csv
 └── .github/
     └── workflows/
-        └── keep-alive.yml           # Prevents Render cold starts
+        └── keep-alive.yml           # Prevents backend cold starts
 ```
+
+> ⚠️ **Frontend data note:** the Dashboard and District Explorer pages read from the **bundled** `frontend/src/data/districtData.json`, not a live API call — this was a source of confusion during the v2 rebuild (backend data was correct but the dashboard kept showing stale numbers because this static file wasn't regenerated). If you update `Data/Processed/district_predictions_all_types.csv`, you must also regenerate `districtData.json` and redeploy the frontend — updating the backend alone is not enough for those two pages.
 
 ---
 
@@ -148,17 +161,17 @@ cd frontend
 npm install
 ```
 
-Create a `.env` file in the `frontend/` directory:
+Create a `.env` file in the `frontend/` directory pointing at your local or deployed backend:
 
 ```env
-VITE_API_URL=http://localhost:8000
+REACT_APP_API_URL=http://localhost:8000
 ```
 
 ```bash
-npm run dev
+npm start
 ```
 
-Frontend will be running at `http://localhost:5173`
+Frontend will be running at `http://localhost:3000`
 
 ---
 
@@ -168,7 +181,7 @@ Frontend will be running at `http://localhost:5173`
 |---|---|---|
 | `GET` | `/` | API info |
 | `GET` | `/health` | Health check — models & data loaded status |
-| `POST` | `/api/predict` | Predict stunting, wasting, underweight |
+| `POST` | `/api/predict` | Predict stunting, wasting, underweight for an individual child |
 | `GET` | `/api/districts` | All districts (paginated via `?limit=` and `?offset=`, filter via `?state=`) |
 | `GET` | `/api/districts/{id}` | Single district by ID |
 | `GET` | `/api/statistics` | National averages across all 707 districts |
@@ -179,35 +192,40 @@ Frontend will be running at `http://localhost:5173`
 POST /api/predict
 {
   "wealth_index": 3,
-  "mother_edu_level": 2,
-  "mother_age": 25,
-  "mother_edu_years": 10,
+  "mother_edu_level": 1,
+  "mother_age": 27,
+  "mother_edu_years": 8,
   "mother_bmi": 2200,
   "mother_works": 0,
   "female_headed_hh": 1,
-  "child_age_months": 24,
+  "child_age_months": 30,
   "child_sex": 1,
-  "birth_interval": 2,
+  "child_age_years": 2,
+  "birth_interval": 32,
   "birth_weight": 2800,
   "breastfeed_duration": 12,
-  "currently_breastfeed": 5000,
   "bcg_vaccination": 1,
   "dpt_vaccination": 1,
-  "measles_vaccination": 1
+  "measles_vaccination": 1,
+  "knows_ors": 1,
+  "urban_rural": 2,
+  "state": 9
 }
 ```
+
+`birth_interval` can be `null` for first-born children (no preceding birth) — the backend imputes the training median in that case.
 
 ### Sample response
 
 ```json
 {
-  "stunting": 28.45,
-  "wasting": 11.20,
-  "underweight": 22.80,
+  "stunting": 42.5,
+  "wasting": 18.2,
+  "underweight": 35.1,
   "risk_level": {
-    "stunting": "Medium",
+    "stunting": "High",
     "wasting": "Medium",
-    "underweight": "Medium"
+    "underweight": "High"
   }
 }
 ```
@@ -219,25 +237,25 @@ POST /api/predict
 | Layer | Platform |
 |---|---|
 | Frontend | Vercel |
-| Backend | Render (Free tier) |
+| Backend | Google Cloud Run (`childmal-backend`), built via Google Cloud Build |
 
-A GitHub Actions workflow (`.github/workflows/keep-alive.yml`) pings the Render backend periodically to prevent cold starts on the free tier.
+A GitHub Actions workflow (`.github/workflows/keep-alive.yml`) pings the backend periodically to prevent cold starts.
 
 ---
 
 ## 📊 Data
 
-Built on **NFHS-5 (National Family Health Survey 5)** district-level data covering **707 Indian districts**. Processed CSV is included in `Data/Processed/`.
+Built on **NFHS-5 (National Family Health Survey 5, 2019–21)**, India's national health survey. The current model trains on **232,920 individual child records** (DHS Children's Recode); the previous pipeline used a 707-row district-level aggregate. Both processed datasets are included in `Data/Processed/`; raw microdata is not included (see [Notebooks](#-notebooks) for how to obtain it).
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Frontend:** React, Vite
+- **Frontend:** React, Recharts, Lucide
 - **Backend:** FastAPI, Python
-- **ML:** scikit-learn (Random Forest), XGBoost
+- **ML:** XGBoost (native JSON model format)
 - **Data:** Pandas, NumPy
-- **Deployment:** Vercel + Render
+- **Deployment:** Vercel + Google Cloud Run
 
 ---
 

@@ -1,10 +1,13 @@
-Malnutrition_Type,Model,Test_R2,Test_RMSE
-Stunting,Linear Reg,0.43625646601911583,5.733287780845225
-Stunting,Random Forest,0.49698719997203,5.415673491849261
-Stunting,XGBoost,0.43061496901362395,5.761903460849777
-Wasting,Linear Reg,0.35975327634034904,4.643342749837409
-Wasting,Random Forest,0.42746178002249924,4.390958189559349
-Wasting,XGBoost,0.36353871863027465,4.629595577458924
-Underweight,Linear Reg,0.6429275796006257,5.549610234305977
-Underweight,Random Forest,0.6771044106982002,5.277343766039357
-Underweight,XGBoost,0.6911492395237837,5.16129480757656
+Malnutrition_Type,Model,Test_R2,Test_RMSE,Notes
+Stunting,Child-level XGBoost (current),0.608,5.32,"Trained on 206k+ individual NFHS-5 child records, evaluated by aggregating out-of-fold child predictions to district level"
+Wasting,Child-level XGBoost (current),0.495,4.63,"Same methodology as above"
+Underweight,Child-level XGBoost (current),0.760,4.80,"Same methodology as above"
+Stunting,District-aggregate Linear Reg (previous),0.436,5.733,"707 pre-aggregated district rows"
+Stunting,District-aggregate Random Forest (previous),0.497,5.416,"707 pre-aggregated district rows"
+Stunting,District-aggregate XGBoost (previous),0.431,5.762,"707 pre-aggregated district rows"
+Wasting,District-aggregate Linear Reg (previous),0.360,4.643,"707 pre-aggregated district rows"
+Wasting,District-aggregate Random Forest (previous),0.427,4.391,"707 pre-aggregated district rows"
+Wasting,District-aggregate XGBoost (previous),0.364,4.630,"707 pre-aggregated district rows"
+Underweight,District-aggregate Linear Reg (previous),0.643,5.550,"707 pre-aggregated district rows"
+Underweight,District-aggregate Random Forest (previous),0.677,5.277,"707 pre-aggregated district rows"
+Underweight,District-aggregate XGBoost (previous),0.691,5.161,"707 pre-aggregated district rows"
