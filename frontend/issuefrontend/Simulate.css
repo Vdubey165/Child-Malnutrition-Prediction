@@ -1,0 +1,126 @@
+.simulate-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  max-width: 640px;
+}
+
+.simulate-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.simulate-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.simulate-controls select {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.simulate-controls input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent-blue);
+}
+
+.simulate-run-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent-blue);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.simulate-run-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.simulate-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  color: var(--stunting);
+  border-left: 4px solid var(--stunting);
+  font-size: 0.9rem;
+}
+
+.simulate-results {
+  padding: 1.5rem;
+}
+
+.simulate-results h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.simulate-metric-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.simulate-metric-row:last-of-type {
+  border-bottom: none;
+}
+
+.metric-label {
+  text-transform: capitalize;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.metric-values {
+  color: var(--text-secondary);
+}
+
+.delta-good {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.delta-bad {
+  color: var(--stunting);
+  font-weight: 600;
+}
+
+.risk-badge {
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+
+.simulate-disclaimer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-light);
+}

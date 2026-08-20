@@ -1,13 +1,7 @@
 import axios from 'axios';
-// ─── Static district data (bundled with the frontend build, no network call) ─
-// Import the pre-built JSON so Dashboard and DistrictExplorer load instantly.
-// Only the /api/predict and /api/simulate endpoints need the live backend.
 import districtDataJson from '../data/districtData.json';
 
-// Single source of truth for the backend URL — also imported by Warmup.js
-// so the "wake the backend up" pings and the actual API calls always target
-// the same host. Do not duplicate this fallback elsewhere.
-export const API_BASE_URL = process.env.REACT_APP_API_URL
+const API_BASE_URL = process.env.REACT_APP_API_URL
   || 'https://childmal-backend-1023489696573.asia-south1.run.app';
 
 const api = axios.create({
@@ -48,7 +42,7 @@ export const getStatistics = async () => {
   };
 };
 
-// ─── Live endpoints (require the live backend) ───────────────────────────────
+// ─── Live endpoints (require Render backend) ─────────────────────────────────
 
 export const predictMalnutrition = async (data) => {
   const response = await api.post('/api/predict', data);

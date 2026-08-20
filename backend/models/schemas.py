@@ -38,7 +38,7 @@ class PredictionInput(BaseModel):
     measles_vaccination:  float = Field(..., ge=0,    le=3)
     knows_ors:            float = Field(..., ge=0,    le=2,    description="Mother's knowledge of ORS packets: 0=no, 1=yes")
     urban_rural:          float = Field(..., ge=1,    le=2,    description="1=urban, 2=rural")
-    state:                int   = Field(..., ge=1,    le=37,   description="NFHS-5 state code — see config.STATE_CODES")
+    state:                int   = Field(..., ge=1,    le=37,   description="NFHS-5 state code — see services.district_mapping.STATE_MAPPING")
 
 
 class PredictionOutput(BaseModel):

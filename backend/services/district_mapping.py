@@ -35,8 +35,8 @@ STATE_MAPPING = {
     22: "Chhattisgarh",
     23: "Madhya Pradesh",
     24: "Gujarat",
-    25: "Daman & Diu",
-    26: "Dadra & Nagar Haveli",
+    25: "Dadra & Nagar Haveli and Daman & Diu",
+    26: "Dadra & Nagar Haveli",  # pre-2020 NFHS v024 code; not present in this dataset (see 25)
     27: "Maharashtra",
     28: "Andhra Pradesh",
     29: "Karnataka",

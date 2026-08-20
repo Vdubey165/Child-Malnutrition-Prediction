@@ -43,12 +43,12 @@
   font-size: 0.875rem;
 }
 
-.trend-up {
+.trend-good {
   color: var(--success);
   font-weight: 600;
 }
 
-.trend-down {
+.trend-bad {
   color: var(--stunting);
   font-weight: 600;
 }

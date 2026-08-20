@@ -7,6 +7,7 @@ import './Landing.css';
 
 const Landing = () => {
   const navigate = useNavigate();
+  const currentYear = new Date().getFullYear();
 
   return (
     <div className="landing">
@@ -15,7 +16,7 @@ const Landing = () => {
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <div className="hero-badge">
-            <span className="badge-icon"></span>
+            <span className="badge-icon">✨</span>
             <span>Powered by Machine Learning</span>
           </div>
           
@@ -305,7 +306,7 @@ const Landing = () => {
       {/* Footer */}
       <footer className="landing-footer">
         <div className="container">
-          <p>© 2024 Child Malnutrition Predictor • Built by Vaibhav Dubey</p>
+          <p>© {currentYear} Child Malnutrition Predictor • Built by Vaibhav Dubey</p>
           <p className="footer-note">Data Source: NFHS-5 (2019-21) • For educational purposes</p>
         </div>
       </footer>

@@ -1,9 +1,10 @@
 // src/services/warmup.js
-// Pings the backend on app load so Render wakes up before the user needs it.
+// Pings the backend on app load so it wakes up before the user needs it.
 // Also installs a keep-alive interval so the server never sleeps while a tab is open.
 
-const API_URL = process.env.REACT_APP_API_URL
-  || 'https://child-malnutrition-prediction-api.onrender.com';
+// Shared with api.js — keeps the warm-up ping and the actual API calls
+// targeting the same host instead of drifting apart.
+import { API_BASE_URL as API_URL } from './api';
 
 let _keepAliveTimer = null;
 

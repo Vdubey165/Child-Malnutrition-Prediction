@@ -1,0 +1,335 @@
+.simulate-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ── Context banner (mirrors Prediction.css) ─────────────────────────────── */
+.context-banner {
+  margin-bottom: 0;
+  cursor: pointer;
+  border-left: 4px solid #6366f1;
+  user-select: none;
+}
+
+.context-banner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.context-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.context-banner-body {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Controls ─────────────────────────────────────────────────────────────── */
+.simulate-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.simulate-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.simulate-controls select {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.simulate-controls input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent-blue);
+}
+
+.simulate-slider-hint {
+  margin: -0.65rem 0 0;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+.simulate-model-note {
+  margin-top: 0.2rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--border);
+  font-style: italic;
+}
+
+.simulate-run-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent-blue);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.simulate-run-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.simulate-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  color: var(--stunting);
+  border-left: 4px solid var(--stunting);
+  font-size: 0.9rem;
+}
+
+/* ── Results ──────────────────────────────────────────────────────────────── */
+.simulate-results {
+  padding: 1.5rem;
+}
+
+.simulate-results h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+/* Legend — explains color/icon/unit meaning before the metrics use them */
+.simulate-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.simulate-legend-note {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  line-height: 1.5;
+  margin: 0 0 1.1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.simulate-metric-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.simulate-metric-row:last-of-type {
+  border-bottom: none;
+}
+
+.simulate-metric-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.metric-icon-dot {
+  font-size: 0.6rem;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+
+.metric-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.92rem;
+}
+
+.metric-desc {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 0.1rem;
+}
+
+.simulate-metric-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 2rem;
+  font-size: 0.95rem;
+}
+
+.metric-values {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.metric-arrow {
+  color: var(--text-light);
+  margin: 0 0.15rem;
+}
+
+.metric-delta {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.simulate-risk-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-left: 2rem;
+  flex-wrap: wrap;
+}
+
+.risk-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.risk-changed-flag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 0.3rem;
+}
+
+.simulate-clamp-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 1rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-light);
+}
+
+.simulate-large-shift-note {
+  color: var(--wasting);
+  font-weight: 500;
+}
+
+/* ── Model transparency note (mirrors Prediction.css) ────────────────────── */
+.transparency-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.875rem 1rem;
+}
+
+.transparency-note p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .simulate-page {
+    max-width: 100%;
+  }
+
+  .simulate-metric-body,
+  .simulate-risk-row {
+    padding-left: 0;
+  }
+
+  .simulate-metric-body {
+    flex-wrap: wrap;
+    gap: 0.3rem 0.75rem;
+  }
+
+  .context-banner-body {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .simulate-results,
+  .simulate-controls,
+  .context-banner,
+  .transparency-note {
+    padding: 1.1rem;
+  }
+
+  .simulate-legend {
+    gap: 0.4rem 0.9rem;
+  }
+
+  .legend-item {
+    font-size: 0.72rem;
+  }
+
+  .metric-values {
+    font-size: 0.85rem;
+  }
+
+  .metric-delta {
+    font-size: 0.82rem;
+  }
+
+  .simulate-risk-row {
+    gap: 0.3rem;
+  }
+
+  .risk-badge {
+    font-size: 0.68rem;
+    padding: 0.18rem 0.45rem;
+  }
+
+  .risk-changed-flag {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+}

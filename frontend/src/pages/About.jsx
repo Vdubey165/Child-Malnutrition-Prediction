@@ -263,7 +263,7 @@ const About = () => {
             ))}
           </div>
           <p className="fi-note">
-            * Stunting & Wasting: Random Forest <code>feature_importances_</code> · Underweight: XGBoost <code>feature_importances_</code>. Top 10 of 22 features shown.
+            * From actual XGBoost <code>feature_importances_</code> outputs — child-level model (v2), all three targets. Top 10 of 22 features shown.
           </p>
         </div>
 
@@ -280,13 +280,13 @@ const About = () => {
           {showLimitations && (
             <div className="limitations-body">
               <div className="lim-item">
-                <strong>Not a clinical tool:</strong> This system estimates district-level population burden, not individual child risk. Do not use for clinical screening or individual diagnosis.
+                <strong>Not a clinical tool:</strong> Predictions are probabilistic risk estimates from survey-based predictors, run at the individual-child level — not a clinical diagnosis. They should not replace direct anthropometric measurement or clinical assessment.
               </div>
               <div className="lim-item">
                 <strong>Data currency:</strong> Models trained on NFHS-5 (2019–21). Conditions may have changed — especially post-COVID disruption to health services and supply chains.
               </div>
               <div className="lim-item">
-                <strong>Input level mismatch:</strong> The Prediction tool accepts profile inputs representing district averages. Interpreting them as individual-level inputs will produce misleading results.
+                <strong>Per-child uncertainty:</strong> Individual predictions are noisier than the headline district-level R² figures suggest (per-child AUC ~0.63–0.70). A single child's estimate carries meaningfully more uncertainty than an aggregated district rate — treat any one prediction as a screening signal, not a precise number.
               </div>
               <div className="lim-item">
                 <strong>Missing variables:</strong> Climate, food prices, conflict/displacement, and infrastructure quality are not included in NFHS-5 but are known malnutrition drivers.

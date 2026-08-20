@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Activity, Map, Info, Menu, X } from 'lucide-react';
+import { Home, Activity, Sliders, Map, Info, Menu, X } from 'lucide-react';
 import './SideBar.css';
 
 const Sidebar = () => {
@@ -9,6 +9,7 @@ const Sidebar = () => {
   const navItems = [
     { path: '/dashboard', icon: Home,     label: 'Dashboard'  },
     { path: '/predict',   icon: Activity, label: 'Prediction' },
+    { path: '/simulate',  icon: Sliders,  label: 'Simulate'   },
     { path: '/districts', icon: Map,      label: 'Districts'  },
     { path: '/about',     icon: Info,     label: 'About'      },
   ];

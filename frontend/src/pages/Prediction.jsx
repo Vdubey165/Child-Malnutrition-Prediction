@@ -569,7 +569,7 @@ const Prediction = () => {
               <div className="empty-state card">
                 <Activity size={48} style={{ color: 'var(--text-light)' }} />
                 <h3>No Estimate Yet</h3>
-                <p>Configure a district profile on the left and click <strong>Run Prediction</strong> to see risk estimates and action plan.</p>
+                <p>Fill in this child's profile on the left and click <strong>Run Prediction</strong> to see risk estimates and action plan.</p>
                 <div className="empty-persona-hint">
                   Selected persona: <strong>{ACTION_PLANS[persona].label}</strong><br/>
                   <span>{ACTION_PLANS[persona].description}</span>

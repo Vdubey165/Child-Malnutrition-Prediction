@@ -1,7 +1,14 @@
 import React from 'react';
 import './StatsCard.css';
 
-const StatsCard = ({ title, value, subtitle, color, icon: Icon, trend }) => {
+const StatsCard = ({ title, value, subtitle, color, icon: Icon, trend, higherIsBetter = false }) => {
+  // Direction is always shown literally (↑/↓ = the value actually went up/down).
+  // Color reflects whether that direction is good or bad for THIS metric —
+  // for malnutrition rates (the default), a rise is bad, so don't reuse the
+  // arrow direction as the color without checking higherIsBetter first.
+  const isIncrease = trend > 0;
+  const isGood = higherIsBetter ? isIncrease : !isIncrease;
+
   return (
     <div className="stats-card card">
       <div className="stats-header">
@@ -18,10 +25,10 @@ const StatsCard = ({ title, value, subtitle, color, icon: Icon, trend }) => {
           </div>
         )}
       </div>
-      {trend && (
+      {!!trend && (
         <div className="stats-trend">
-          <span className={trend > 0 ? 'trend-up' : 'trend-down'}>
-            {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
+          <span className={isGood ? 'trend-good' : 'trend-bad'}>
+            {isIncrease ? '↑' : '↓'} {Math.abs(trend)}%
           </span>
           <span className="trend-text">vs national avg</span>
         </div>

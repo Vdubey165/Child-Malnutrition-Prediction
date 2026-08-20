@@ -193,7 +193,6 @@ const DistrictExplorer = () => {
           {filteredDistricts.map((district) => {
             const score     = compositeScore(district);
             const riskLevel = getRiskLevel(score);
-            const isAboveAvg = nationalAvg && score > compositeScore({ actual_stunting: nationalAvg.stunting, actual_wasting: nationalAvg.wasting, actual_underweight: nationalAvg.underweight });
 
             return (
               <div
