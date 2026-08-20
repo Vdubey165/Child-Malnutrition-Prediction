@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Activity, TrendingDown, AlertCircle, Info, ChevronDown, ChevronUp, Target, Zap, BookOpen, Users } from 'lucide-react';
+import { Activity, TrendingDown, AlertCircle, AlertTriangle, Info, ChevronDown, ChevronUp, Target, Zap, BookOpen, Users, Landmark, HeartHandshake, Microscope, MapPin, UserRound, Baby, Syringe, Search } from 'lucide-react';
 import Header from '../components/Header';
 import { predictMalnutrition } from '../services/api';
 import './Prediction.css';
@@ -61,7 +61,8 @@ const STATE_OPTIONS = [
 // ─── Persona-aware action plans ───
 const ACTION_PLANS = {
   policymaker: {
-    label: '🏛️ Policymaker',
+    label: 'Policymaker',
+    icon: Landmark,
     description: 'District-level resource allocation & policy response',
     high: [
       { priority: 'P1', action: 'Declare nutritional emergency — activate ICDS supplementary feeding for all U5 children', dept: 'Health & WCD Ministry' },
@@ -81,7 +82,8 @@ const ACTION_PLANS = {
     ],
   },
   ngo: {
-    label: '🤝 NGO / Field Worker',
+    label: 'NGO / Field Worker',
+    icon: HeartHandshake,
     description: 'Community-level intervention & outreach targeting',
     high: [
       { priority: 'P1', action: 'Identify and enroll SAM/MAM children in nearest NRC — conduct door-to-door screening', dept: 'Community Outreach' },
@@ -99,7 +101,8 @@ const ACTION_PLANS = {
     ],
   },
   researcher: {
-    label: '🔬 Researcher / Analyst',
+    label: 'Researcher / Analyst',
+    icon: Microscope,
     description: 'Data-driven insights & evidence generation',
     high: [
       { priority: 'P1', action: 'Conduct geospatial clustering analysis to identify malnutrition hotspot corridors', dept: 'Spatial Analytics' },
@@ -263,6 +266,7 @@ const Prediction = () => {
               onClick={() => setPersona(key)}
               type="button"
             >
+              <val.icon size={14} />
               {val.label}
             </button>
           ))}
@@ -272,7 +276,7 @@ const Prediction = () => {
         {/* ── Input risk flags ── */}
         {inputFlags.length > 0 && (
           <div className="input-flags card">
-            <h4>⚠️ Profile Risk Signals</h4>
+            <h4 className="risk-flags-title"><AlertTriangle size={16} /> Profile Risk Signals</h4>
             <div className="flags-list">
               {inputFlags.map((f, i) => (
                 <div key={i} className="flag-item">{f}</div>
@@ -287,7 +291,7 @@ const Prediction = () => {
             <h3 className="form-title">Child Profile Inputs</h3>
 
             <div className="form-group-section">
-              <h4 className="group-title">📍 Location</h4>
+              <h4 className="group-title"><MapPin size={16} /> Location</h4>
               <div className="form-group">
                 <label>State</label>
                 <select name="state" value={formData.state} onChange={handleChange}>
@@ -307,7 +311,7 @@ const Prediction = () => {
             </div>
 
             <div className="form-group-section">
-              <h4 className="group-title">👩 Maternal Characteristics</h4>
+              <h4 className="group-title"><UserRound size={16} /> Maternal Characteristics</h4>
               <div className="form-group">
                 <label>Household Wealth Index (1–5)</label>
                 <input type="number" name="wealth_index" min="1" max="5" step="1" value={formData.wealth_index} onChange={handleChange} />
@@ -352,7 +356,7 @@ const Prediction = () => {
             </div>
 
             <div className="form-group-section">
-              <h4 className="group-title">👶 Child Profile</h4>
+              <h4 className="group-title"><Baby size={16} /> Child Profile</h4>
               <div className="form-group">
                 <label>Child Age (months)</label>
                 <input type="number" name="child_age_months" min="0" max="59" value={formData.child_age_months} onChange={handleChange} />
@@ -388,7 +392,7 @@ const Prediction = () => {
             </div>
 
             <div className="form-group-section">
-              <h4 className="group-title">💉 Healthcare & Nutrition</h4>
+              <h4 className="group-title"><Syringe size={16} /> Healthcare & Nutrition</h4>
               <div className="form-group">
                 <label>Breastfeeding Duration (months)</label>
                 <input type="number" name="breastfeed_duration" min="0" max="90" value={formData.breastfeed_duration} onChange={handleChange} />
@@ -417,8 +421,8 @@ const Prediction = () => {
 
             {error && <div className="error-message">{error}</div>}
 
-            <button className="btn btn-primary" disabled={loading} onClick={handleSubmit} type="button">
-              {loading ? 'Estimating...' : '🔍 Run Prediction'}
+            <button className="btn btn-primary predict-submit-btn" disabled={loading} onClick={handleSubmit} type="button">
+              {loading ? 'Estimating...' : (<><Search size={16} /> Run Prediction</>)}
             </button>
           </div>
 

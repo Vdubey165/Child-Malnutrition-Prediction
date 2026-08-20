@@ -60,6 +60,9 @@
 }
 
 .persona-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   padding: 0.4rem 1rem;
   border-radius: 999px;
   border: 2px solid var(--border);
@@ -88,6 +91,9 @@
 }
 
 .input-flags h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
@@ -120,6 +126,9 @@
 .form-group-section:last-of-type { border-bottom: none; }
 
 .group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   font-size: 0.95rem;
   font-weight: 600;
   margin-bottom: 1rem;
