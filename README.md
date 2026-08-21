@@ -1,6 +1,6 @@
 # 🩺 Child Malnutrition Prediction
 
-A full-stack ML web application predicting child malnutrition risk across India using NFHS-5 data. Supports both **individual child-level prediction** (stunting, wasting, underweight) and **district-level analytics** across all 707 districts.
+A full-stack ML web application predicting child malnutrition risk across India using NFHS-5 data. Supports **individual child-level prediction** (stunting, wasting, underweight), **district-level analytics** across all 707 districts, and a **scenario simulator** for exploring how shifting one district-average factor associates with predicted rates.
 
 **Live Demo:** [child-malnutrition-prediction.vercel.app](https://child-malnutrition-prediction.vercel.app)
 **API:** [childmal-backend-1023489696573.asia-south1.run.app](https://childmal-backend-1023489696573.asia-south1.run.app)
@@ -15,7 +15,7 @@ A full-stack ML web application predicting child malnutrition risk across India 
 
 **Dashboard — National Overview**
 ![Dashboard](screenshots/dashboard.png)
-> National averages: Stunting 33.6% · Wasting 18.5% · Underweight 29.5% · District risk distribution across 707 districts
+> National averages: Stunting 35.5% · Wasting 19.3% · Underweight 32.1% · District risk distribution across 707 districts
 
 **District Explorer**
 ![Districts](screenshots/districts.png)
@@ -24,6 +24,10 @@ A full-stack ML web application predicting child malnutrition risk across India 
 **Malnutrition Risk Estimator**
 ![Prediction](screenshots/prediction.png)
 > Input an individual child's profile (mother's characteristics, birth history, vaccination status, state) to get predicted risk with classification vs national average.
+
+**Scenario Simulator**
+![Simulate](screenshots/simulate.png)
+> Estimate how a district-level shift in wealth, mother's education, or BCG coverage associates with predicted malnutrition rates — one factor at a time, using a separate district-aggregate model (see below).
 
 **Feature Importance Analysis**
 ![Feature Importance](screenshots/feature-importance.png)
@@ -41,9 +45,9 @@ A full-stack ML web application predicting child malnutrition risk across India 
 
 | Target | R² (district-level, 5-fold CV) | Previous (district-aggregate) |
 |---|---|---|
-| Stunting | **0.608** | 0.478 |
-| Wasting | **0.495** | 0.343 |
-| Underweight | **0.760** | 0.598 |
+| Stunting | **0.608** | 0.497 |
+| Wasting | **0.495** | 0.427 |
+| Underweight | **0.760** | 0.691 |
 
 Full history and reasoning: see [`Notebook/03_child_level_model_rebuild.ipynb`](Notebook/03_child_level_model_rebuild.ipynb).
 
@@ -60,6 +64,8 @@ Full history and reasoning: see [`Notebook/03_child_level_model_rebuild.ipynb`](
 > `birth_interval` actually read the child's *current age* (`b8`) rather than
 > the true preceding birth interval (`b11`). Both corrected — see the
 > rebuild notebook for details.
+
+**v1 (retained, powers the Scenario Simulator only):** The original district-aggregate models — Random Forest for stunting and wasting, XGBoost for underweight (`Models/v1/*.pkl`) — trained on 707 district-average rows rather than individual children. Deliberately kept and used only by `/api/simulate`: a district-averaged "what if" input matches this model's training distribution exactly, whereas feeding an averaged profile into the v2 child-level model would be out-of-distribution for it. The simulator only allows one feature to change per run, and flags (but doesn't block) scenarios where a shift is unusually large relative to how much real districts actually vary — see `backend/routers/simulate.py` for the exact logic.
 
 ---
 
@@ -83,24 +89,27 @@ The `Notebook/` directory contains the full ML pipeline history:
 child-malnutrition/
 ├── backend/
 │   ├── main.py                      # FastAPI entry point
-│   ├── config.py                    # All paths, model files, state code mapping
+│   ├── config.py                    # All paths and model file locations
 │   ├── models/
 │   │   └── schemas.py               # Pydantic request/response schemas (child-level input)
 │   ├── services/
-│   │   ├── district_mapping.py      # District & state name enrichment
+│   │   ├── district_mapping.py      # District & state name enrichment (state code mapping lives here)
 │   │   ├── ml_models.py             # XGBoost model loading (graceful 503 on failure)
+│   │   ├── ml_models_v1.py          # District-aggregate v1 model loading (Scenario Simulator only)
 │   │   └── district_data.py         # District CSV loading
 │   ├── routers/
 │   │   ├── prediction.py            # POST /api/predict
+│   │   ├── simulate.py              # POST /api/simulate (Scenario Simulator, v1 models)
 │   │   ├── districts.py             # GET /api/districts, /api/districts/{id}
 │   │   └── statistics.py            # GET /api/statistics
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   ├── pages/                   # Landing, Dashboard, DistrictExplorer, Prediction, About
+│   │   ├── pages/                   # Landing, Dashboard, DistrictExplorer, Prediction, Simulate, About
 │   │   ├── services/
-│   │   │   └── api.js               # Live backend calls (predict) + static bundled district data (dashboard/explorer)
+│   │   │   ├── api.js               # Live backend calls (predict, simulate) + static bundled district data (dashboard/explorer)
+│   │   │   └── Warmup.js            # Pings /health on load + keep-alive interval; shares API_BASE_URL with api.js
 │   │   ├── data/
 │   │   │   └── districtData.json    # Pre-built district snapshot bundled at build time — regenerate from Data/Processed/ when data changes
 │   │   └── App.js
@@ -112,12 +121,16 @@ child-malnutrition/
 ├── Models/
 │   ├── final_model_stunting.json    # Child-level XGBoost (native JSON format)
 │   ├── final_model_wasting.json
-│   └── final_model_underweight.json
+│   ├── final_model_underweight.json
+│   └── v1/                          # District-aggregate models (Scenario Simulator only — see ML Models)
+│       ├── random_forest_stunting.pkl
+│       ├── random_forest_wasting.pkl
+│       └── xgboost_underweight.pkl
 ├── Data/
 │   ├── Raw/                         # NFHS-5 DHS flat ASCII files (not in repo — see Notebooks section)
 │   └── Processed/
-│       ├── district_malnutrition_enhanced.csv
-│       ├── district_predictions_all_types.csv
+│       ├── district_malnutrition_enhanced.csv    # 707-row training data for the v1 simulator models
+│       ├── district_predictions_all_types.csv     # v2 predictions aggregated to district level (Dashboard/Explorer)
 │       ├── complete_district_mapping.csv
 │       ├── district_name_mapping.csv
 │       └── state_level_summary.csv
@@ -180,8 +193,9 @@ Frontend will be running at `http://localhost:3000`
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/` | API info |
-| `GET` | `/health` | Health check — models & data loaded status |
+| `GET` | `/health` | Health check — models & data loaded status (includes `simulator_available`) |
 | `POST` | `/api/predict` | Predict stunting, wasting, underweight for an individual child |
+| `POST` | `/api/simulate` | Estimate the effect of shifting one district-average feature (Scenario Simulator, v1 models) |
 | `GET` | `/api/districts` | All districts (paginated via `?limit=` and `?offset=`, filter via `?state=`) |
 | `GET` | `/api/districts/{id}` | Single district by ID |
 | `GET` | `/api/statistics` | National averages across all 707 districts |
@@ -230,6 +244,40 @@ POST /api/predict
 }
 ```
 
+### Sample simulate request
+
+```json
+POST /api/simulate
+{
+  "district_id": 101,
+  "feature_deltas": { "wealth_index": 0.5 }
+}
+```
+
+Only one feature may be changed per request — `feature_deltas` with more than one non-zero entry returns `400`. Values are clamped to that feature's observed range across all 707 districts.
+
+### Sample simulate response
+
+```json
+{
+  "district_id": 101,
+  "district_name": "Example District",
+  "state_name": "Example State",
+  "baseline": { "stunting": 38.2, "wasting": 16.4, "underweight": 30.1 },
+  "scenario": { "stunting": 35.7, "wasting": 15.9, "underweight": 27.8 },
+  "delta": { "stunting": -2.5, "wasting": -0.5, "underweight": -2.3 },
+  "risk_level_baseline": { "stunting": "Medium", "wasting": "Medium", "underweight": "Medium" },
+  "risk_level_scenario": { "stunting": "Medium", "wasting": "Medium", "underweight": "Medium" },
+  "applied_deltas": { "wealth_index": 0.5 },
+  "clamped_features": {},
+  "large_shift_features": {},
+  "model_version": "v1-district-aggregate",
+  "disclaimer": "Estimated association based on historical district-level patterns (R² 0.43–0.69 on held-out test districts), not a causal forecast. District-wide averages are not directly controllable by policy."
+}
+```
+
+`large_shift_features` is populated when the applied change is more than 1 standard deviation from that feature's real spread across all districts — a soft caution, not a hard block.
+
 ---
 
 ## 🌐 Deployment
@@ -253,7 +301,7 @@ Built on **NFHS-5 (National Family Health Survey 5, 2019–21)**, India's nation
 
 - **Frontend:** React, Recharts, Lucide
 - **Backend:** FastAPI, Python
-- **ML:** XGBoost (native JSON model format)
+- **ML:** XGBoost (native JSON format, v2 child-level models) · scikit-learn Random Forest + pickled XGBoost (v1 district-aggregate models, Scenario Simulator only)
 - **Data:** Pandas, NumPy
 - **Deployment:** Vercel + Google Cloud Run
 
