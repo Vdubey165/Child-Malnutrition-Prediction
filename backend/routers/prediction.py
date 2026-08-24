@@ -13,6 +13,7 @@ from fastapi import APIRouter, HTTPException
 from models.schemas import PredictionInput, PredictionOutput
 from services import ml_models
 from services.ml_models import get_models
+from services import gpio_indicator
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -21,6 +22,12 @@ router = APIRouter()
 # (b11 is undefined/missing for ~40% of children -- those with no preceding
 # sibling -- so it cannot be a required field).
 _BIRTH_INTERVAL_MEDIAN = 32.0
+
+# Worst-of-three ordering for the physical LED indicator — mirrors the
+# same "overall risk = worst outcome" logic already used by the frontend's
+# overallRisk calculation in Prediction.jsx, so the LED always agrees with
+# what the screen is showing.
+_RISK_SEVERITY = {"Low": 0, "Medium": 1, "High": 2}
 
 
 def _get_risk(val: float, low: float, med: float) -> str:
@@ -76,13 +83,20 @@ async def predict_malnutrition(input_data: PredictionInput):
         logger.exception("Prediction failed")
         raise HTTPException(status_code=500, detail="Prediction failed. Please try again.")
 
+    risk_level = {
+        "stunting":    _get_risk(pred_stunting,    20, 35),
+        "wasting":     _get_risk(pred_wasting,     10, 20),
+        "underweight": _get_risk(pred_underweight, 20, 35),
+    }
+
+    # Drive the physical LED (no-op if not running on the Pi) with the
+    # single worst risk band across the three outcomes.
+    overall = max(risk_level.values(), key=lambda r: _RISK_SEVERITY[r])
+    gpio_indicator.show_risk(overall)
+
     return PredictionOutput(
         stunting=round(pred_stunting, 2),
         wasting=round(pred_wasting, 2),
         underweight=round(pred_underweight, 2),
-        risk_level={
-            "stunting":    _get_risk(pred_stunting,    20, 35),
-            "wasting":     _get_risk(pred_wasting,     10, 20),
-            "underweight": _get_risk(pred_underweight, 20, 35),
-        },
+        risk_level=risk_level,
     )

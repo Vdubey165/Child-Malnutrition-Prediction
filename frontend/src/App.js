@@ -11,16 +11,38 @@ import WakeupBanner from './components/WakeupBanner';
 import { warmupBackend } from './services/Warmup';
 import './App.css';
 
+// Set at build time: `REACT_APP_KIOSK_MODE=true npm run build` produces the
+// Pi field-deployment build (Prediction only, no sidebar, no other pages).
+// The regular `npm run build` (flag unset) still produces the full
+// Vercel-hosted app, unchanged.
+const KIOSK = process.env.REACT_APP_KIOSK_MODE === 'true';
+
 function App() {
-  const [backendReady, setBackendReady] = useState(false);
+  const [backendReady, setBackendReady] = useState(KIOSK);
   const [waitSeconds, setWaitSeconds]   = useState(0);
 
   useEffect(() => {
+    // The warmup/cold-start banner exists for the Cloud Run backend, which
+    // can sleep after inactivity. The Pi's backend is local and always
+    // running, so there's no cold start to wait out — skip the ping
+    // entirely in kiosk mode rather than showing a pointless "waking up"
+    // banner to a field worker.
+    if (KIOSK) return;
     warmupBackend(
       () => setBackendReady(true),
       (s) => setWaitSeconds(s)
     );
   }, []);
+
+  if (KIOSK) {
+    return (
+      <Router>
+        <Routes>
+          <Route path="*" element={<Prediction />} />
+        </Routes>
+      </Router>
+    );
+  }
 
   return (
     <>
