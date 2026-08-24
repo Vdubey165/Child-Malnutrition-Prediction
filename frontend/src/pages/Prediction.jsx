@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Activity, TrendingDown, AlertCircle, AlertTriangle, Info, ChevronDown, ChevronUp, Target, Zap, BookOpen, Users, Landmark, HeartHandshake, Microscope, MapPin, UserRound, Baby, Syringe, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Activity, TrendingDown, AlertCircle, Info, ChevronDown, ChevronUp, Target, Zap, BookOpen, Users } from 'lucide-react';
 import Header from '../components/Header';
 import { predictMalnutrition } from '../services/api';
 import './Prediction.css';
@@ -58,11 +58,32 @@ const STATE_OPTIONS = [
   [35,'Andaman & Nicobar Islands'],[36,'Telangana'],[37,'Ladakh'],
 ];
 
+// Household asset tiers mapped to NFHS-5 wealth quintiles (v190), so a
+// user can pick a description of the household instead of guessing a 1-5
+// number the raw survey coding never explains.
+const WEALTH_TIERS = [
+  { value: 1, title: 'Poorest',      desc: 'Kutcha (mud/thatch) house, no reliable electricity, no toilet, no vehicle' },
+  { value: 2, title: 'Lower middle', desc: 'Semi-pucca house, electricity, basic toilet, maybe a bicycle' },
+  { value: 3, title: 'Middle',       desc: 'Pucca (brick/concrete) house, own toilet, motorcycle/scooter, LPG, TV' },
+  { value: 4, title: 'Upper middle', desc: 'Pucca house, motorcycle, fridge, TV, smartphone, good water/sanitation' },
+  { value: 5, title: 'Richest',      desc: 'Car, AC, computer, high-end housing, all modern amenities' },
+];
+
+// Highest education level completed -> (DHS level code, typical years of
+// schooling). Years is editable afterward — this is just a sane starting
+// point so the user isn't asked to know both a category AND an exact year
+// count from scratch.
+const EDUCATION_LEVELS = [
+  { value: 0, label: 'Never attended school',           defaultYears: 0 },
+  { value: 1, label: 'Primary (up to class 5–8)',        defaultYears: 5 },
+  { value: 2, label: 'Secondary (class 9–12)',            defaultYears: 10 },
+  { value: 3, label: 'Higher (college/diploma/degree)',   defaultYears: 15 },
+];
+
 // ─── Persona-aware action plans ───
 const ACTION_PLANS = {
   policymaker: {
-    label: 'Policymaker',
-    icon: Landmark,
+    label: '🏛️ Policymaker',
     description: 'District-level resource allocation & policy response',
     high: [
       { priority: 'P1', action: 'Declare nutritional emergency — activate ICDS supplementary feeding for all U5 children', dept: 'Health & WCD Ministry' },
@@ -82,8 +103,7 @@ const ACTION_PLANS = {
     ],
   },
   ngo: {
-    label: 'NGO / Field Worker',
-    icon: HeartHandshake,
+    label: '🤝 NGO / Field Worker',
     description: 'Community-level intervention & outreach targeting',
     high: [
       { priority: 'P1', action: 'Identify and enroll SAM/MAM children in nearest NRC — conduct door-to-door screening', dept: 'Community Outreach' },
@@ -101,8 +121,7 @@ const ACTION_PLANS = {
     ],
   },
   researcher: {
-    label: 'Researcher / Analyst',
-    icon: Microscope,
+    label: '🔬 Researcher / Analyst',
     description: 'Data-driven insights & evidence generation',
     high: [
       { priority: 'P1', action: 'Conduct geospatial clustering analysis to identify malnutrition hotspot corridors', dept: 'Spatial Analytics' },
@@ -159,6 +178,46 @@ const Prediction = () => {
     state: 9,
   });
   const [firstBorn, setFirstBorn] = useState(false);
+
+  // ── Plain-language inputs that get converted into the model's encoded
+  // fields automatically, instead of asking the user to already know the
+  // DHS encoding (BMI×100, months-since-sibling, etc.) ──
+  const [weightKg, setWeightKg] = useState(55);
+  const [heightCm, setHeightCm] = useState(158);
+  const [olderSiblingAgeMonths, setOlderSiblingAgeMonths] = useState(62);
+
+  const bmiValue = (weightKg > 0 && heightCm > 0)
+    ? weightKg / Math.pow(heightCm / 100, 2)
+    : null;
+  const bmiCategory = bmiValue == null ? ''
+    : bmiValue < 18.5 ? 'Underweight'
+    : bmiValue < 25   ? 'Normal'
+    : bmiValue < 30   ? 'Overweight'
+    : 'Obese';
+
+  // Keep the encoded mother_bmi field (×100) in sync with the plain
+  // weight/height inputs whenever either changes.
+  useEffect(() => {
+    if (bmiValue != null) {
+      setFormData(prev => ({ ...prev, mother_bmi: Math.round(bmiValue * 100) }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [weightKg, heightCm]);
+
+  // Birth interval = difference between the older sibling's current age
+  // and this child's current age — both measured "as of today", so the
+  // gap between them is exactly the interval between their births. Avoids
+  // asking the user for a raw months-since-sibling number they'd have to
+  // calculate by hand.
+  useEffect(() => {
+    if (!firstBorn) {
+      const interval = Number(olderSiblingAgeMonths) - Number(formData.child_age_months);
+      if (interval > 0) {
+        setFormData(prev => ({ ...prev, birth_interval: interval }));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [olderSiblingAgeMonths, formData.child_age_months, firstBorn]);
 
   const [prediction, setPrediction]   = useState(null);
   const [loading, setLoading]         = useState(false);
@@ -266,7 +325,6 @@ const Prediction = () => {
               onClick={() => setPersona(key)}
               type="button"
             >
-              <val.icon size={14} />
               {val.label}
             </button>
           ))}
@@ -276,7 +334,7 @@ const Prediction = () => {
         {/* ── Input risk flags ── */}
         {inputFlags.length > 0 && (
           <div className="input-flags card">
-            <h4 className="risk-flags-title"><AlertTriangle size={16} /> Profile Risk Signals</h4>
+            <h4>⚠️ Profile Risk Signals</h4>
             <div className="flags-list">
               {inputFlags.map((f, i) => (
                 <div key={i} className="flag-item">{f}</div>
@@ -291,7 +349,7 @@ const Prediction = () => {
             <h3 className="form-title">Child Profile Inputs</h3>
 
             <div className="form-group-section">
-              <h4 className="group-title"><MapPin size={16} /> Location</h4>
+              <h4 className="group-title">📍 Location</h4>
               <div className="form-group">
                 <label>State</label>
                 <select name="state" value={formData.state} onChange={handleChange}>
@@ -311,33 +369,61 @@ const Prediction = () => {
             </div>
 
             <div className="form-group-section">
-              <h4 className="group-title"><UserRound size={16} /> Maternal Characteristics</h4>
+              <h4 className="group-title">👩 Maternal Characteristics</h4>
               <div className="form-group">
-                <label>Household Wealth Index (1–5)</label>
-                <input type="number" name="wealth_index" min="1" max="5" step="1" value={formData.wealth_index} onChange={handleChange} />
-                <span className="help-text">1 = Poorest quintile, 5 = Richest quintile | <strong>Strongest overall predictor</strong></span>
+                <label>Which best describes the household?</label>
+                <select
+                  name="wealth_index"
+                  value={formData.wealth_index}
+                  onChange={(e) => setFormData(prev => ({ ...prev, wealth_index: Number(e.target.value) }))}
+                >
+                  {WEALTH_TIERS.map(t => (
+                    <option key={t.value} value={t.value}>{t.title} — {t.desc}</option>
+                  ))}
+                </select>
+                <span className="help-text">
+                  Ranked against all Indian households (not just this area) | <strong>Strongest overall predictor</strong>
+                </span>
               </div>
               <div className="form-group">
                 <label>Mother's Age (years)</label>
                 <input type="number" name="mother_age" min="15" max="49" value={formData.mother_age} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Mother's Education (years)</label>
+                <label>Mother's Highest Education Completed</label>
+                <select
+                  name="mother_edu_level"
+                  value={formData.mother_edu_level}
+                  onChange={(e) => {
+                    const level = Number(e.target.value);
+                    const preset = EDUCATION_LEVELS.find(l => l.value === level);
+                    setFormData(prev => ({
+                      ...prev,
+                      mother_edu_level: level,
+                      mother_edu_years: preset ? preset.defaultYears : prev.mother_edu_years,
+                    }));
+                  }}
+                >
+                  {EDUCATION_LEVELS.map(l => (
+                    <option key={l.value} value={l.value}>{l.label}</option>
+                  ))}
+                </select>
+                <span className="help-text">Sets a typical years-of-schooling estimate — refine below if you know the exact number.</span>
+              </div>
+              <div className="form-group">
+                <label>Exact years of schooling (refine if known)</label>
                 <input type="number" name="mother_edu_years" min="0" max="20" value={formData.mother_edu_years} onChange={handleChange} />
               </div>
               <div className="form-group">
-                <label>Mother's Education Level</label>
-                <select name="mother_edu_level" value={formData.mother_edu_level} onChange={handleChange}>
-                  <option value="0">No education</option>
-                  <option value="1">Primary</option>
-                  <option value="2">Secondary</option>
-                  <option value="3">Higher</option>
-                </select>
+                <label>Mother's Weight (kg)</label>
+                <input type="number" min="30" max="150" step="0.5" value={weightKg} onChange={(e) => setWeightKg(Number(e.target.value))} />
               </div>
               <div className="form-group">
-                <label>Mother's BMI (×100)</label>
-                <input type="number" name="mother_bmi" min="1200" max="6000" step="50" value={formData.mother_bmi} onChange={handleChange} />
-                <span className="help-text">Normal range: 1850–2500</span>
+                <label>Mother's Height (cm)</label>
+                <input type="number" min="120" max="200" step="0.5" value={heightCm} onChange={(e) => setHeightCm(Number(e.target.value))} />
+                <span className="help-text">
+                  {bmiValue != null && <>BMI: <strong>{bmiValue.toFixed(1)}</strong> ({bmiCategory})</>}
+                </span>
               </div>
               <div className="form-group">
                 <label>Mother Currently Working?</label>
@@ -347,16 +433,17 @@ const Prediction = () => {
                 </select>
               </div>
               <div className="form-group">
-                <label>Head of Household</label>
+                <label>Household's Main Earner / Decision-Maker</label>
                 <select name="female_headed_hh" value={formData.female_headed_hh} onChange={handleChange}>
                   <option value="1">Male</option>
                   <option value="2">Female</option>
                 </select>
+                <span className="help-text">A recognized socioeconomic indicator — female-headed households often face different resource access.</span>
               </div>
             </div>
 
             <div className="form-group-section">
-              <h4 className="group-title"><Baby size={16} /> Child Profile</h4>
+              <h4 className="group-title">👶 Child Profile</h4>
               <div className="form-group">
                 <label>Child Age (months)</label>
                 <input type="number" name="child_age_months" min="0" max="59" value={formData.child_age_months} onChange={handleChange} />
@@ -385,14 +472,23 @@ const Prediction = () => {
               </div>
               {!firstBorn && (
                 <div className="form-group">
-                  <label>Birth Interval (months since previous sibling)</label>
-                  <input type="number" name="birth_interval" min="5" max="280" value={formData.birth_interval} onChange={handleChange} />
+                  <label>Older sibling's current age (months)</label>
+                  <input
+                    type="number"
+                    min="1" max="300"
+                    value={olderSiblingAgeMonths}
+                    onChange={(e) => setOlderSiblingAgeMonths(e.target.value)}
+                  />
+                  <span className="help-text">
+                    Birth interval: <strong>{formData.birth_interval} months</strong> apart
+                    (calculated from the two ages above)
+                  </span>
                 </div>
               )}
             </div>
 
             <div className="form-group-section">
-              <h4 className="group-title"><Syringe size={16} /> Healthcare & Nutrition</h4>
+              <h4 className="group-title">💉 Healthcare & Nutrition</h4>
               <div className="form-group">
                 <label>Breastfeeding Duration (months)</label>
                 <input type="number" name="breastfeed_duration" min="0" max="90" value={formData.breastfeed_duration} onChange={handleChange} />
@@ -421,8 +517,8 @@ const Prediction = () => {
 
             {error && <div className="error-message">{error}</div>}
 
-            <button className="btn btn-primary predict-submit-btn" disabled={loading} onClick={handleSubmit} type="button">
-              {loading ? 'Estimating...' : (<><Search size={16} /> Run Prediction</>)}
+            <button className="btn btn-primary" disabled={loading} onClick={handleSubmit} type="button">
+              {loading ? 'Estimating...' : '🔍 Run Prediction'}
             </button>
           </div>
 
