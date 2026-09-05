@@ -1,4 +1,4 @@
-# 🩺 Child Malnutrition Prediction
+# Child Malnutrition Prediction
 
 A full-stack ML web application predicting child malnutrition risk across India using NFHS-5 data. Supports **individual child-level prediction** (stunting, wasting, underweight), **district-level analytics** across all 707 districts, and a **scenario simulator** for exploring how shifting one district-average factor associates with predicted rates.
 
@@ -7,27 +7,27 @@ A full-stack ML web application predicting child malnutrition risk across India 
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 **Landing Page**
 ![Landing Page](screenshots/landing.png)
-> 232,920 children analyzed · 707 districts covered · 76% prediction accuracy (R² underweight, child-level model)
+> 232,920 children analyzed, 707 districts covered, 76% R² (underweight, child-level model)
 
 **Dashboard — National Overview**
 ![Dashboard](screenshots/dashboard.png)
-> National averages: Stunting 35.5% · Wasting 19.3% · Underweight 32.1% · District risk distribution across 707 districts
+> National averages and district risk distribution across all 707 districts
 
 **District Explorer**
 ![Districts](screenshots/districts.png)
-> Browse and filter all 707 districts by composite risk score, ranked by stunting, wasting, and underweight rates.
+> Browse and filter all 707 districts by composite risk score
 
 **Malnutrition Risk Estimator**
 ![Prediction](screenshots/prediction.png)
-> Input an individual child's profile (mother's characteristics, birth history, vaccination status, state) to get predicted risk with classification vs national average.
+> Individual child profile in, predicted risk vs. national average out
 
 **Scenario Simulator**
 ![Simulate](screenshots/simulate.png)
-> Estimate how a district-level shift in wealth, mother's education, or BCG coverage associates with predicted malnutrition rates — one factor at a time, using a separate district-aggregate model (see below).
+> District-level "what if" scenarios — one factor at a time, via a separate district-aggregate model (see below)
 
 **Feature Importance Analysis**
 ![Feature Importance](screenshots/feature-importance.png)
@@ -35,11 +35,11 @@ A full-stack ML web application predicting child malnutrition risk across India 
 
 **About — Model Evaluation**
 ![About](screenshots/about.png)
-> R² comparison: current child-level model vs. previous district-aggregate models.
+> R² comparison: current child-level model vs. previous district-aggregate models
 
 ---
 
-## 🧠 ML Models
+## ML Models
 
 **v2 (current):** A single XGBoost classifier per target, trained on **232,920 individual NFHS-5 child records** (not pre-aggregated district means). Evaluated by generating out-of-fold per-child predictions via 5-fold cross-validation, then aggregating those predictions to the district level for comparison against actual district rates.
 
@@ -59,7 +59,7 @@ Full history and reasoning: see [`Notebook/03_child_level_model_rebuild.ipynb`](
 - Stunting / Underweight: Low < 20% · Medium < 35% · High ≥ 35%
 - Wasting: Low < 10% · Medium < 20% · High ≥ 20%
 
-> ⚠️ **Two data bugs fixed in v2:** the earlier pipeline's `birth_weight` field
+> **Two data bugs fixed in v2:** the earlier pipeline's `birth_weight` field
 > actually read the *mother's* weight (DHS variable `v437`), and
 > `birth_interval` actually read the child's *current age* (`b8`) rather than
 > the true preceding birth interval (`b11`). Both corrected — see the
@@ -69,7 +69,7 @@ Full history and reasoning: see [`Notebook/03_child_level_model_rebuild.ipynb`](
 
 ---
 
-## 📓 Notebooks
+## Notebooks
 
 The `Notebook/` directory contains the full ML pipeline history:
 
@@ -79,11 +79,11 @@ The `Notebook/` directory contains the full ML pipeline history:
 | `Data_exploration.ipynb` | Archived | Original district-aggregation pipeline (superseded — see deprecation notice in the notebook) |
 | `02_feature_engineering_and_modeling.ipynb` | Archived | Original 9-algorithm district-level model comparison (superseded — see deprecation notice in the notebook) |
 
-> **Note:** `Data/Raw/IAKR7EFL.*` (NFHS-5 Children's Recode, DHS flat ASCII format) is not included in this repo per DHS Program data-use terms. To re-run `03_child_level_model_rebuild.ipynb`, register at [dhsprogram.com](https://dhsprogram.com), request the India NFHS-5 (2019–21) dataset, and download the Children's Recode in "Flat ASCII data (.dat)" format into `Data/Raw/`. The processed outputs and trained models are already included so the app runs without them.
+> `Data/Raw/IAKR7EFL.*` (NFHS-5 Children's Recode, DHS flat ASCII format) is not included in this repo per DHS Program data-use terms. To re-run `03_child_level_model_rebuild.ipynb`, register at [dhsprogram.com](https://dhsprogram.com), request the India NFHS-5 (2019–21) dataset, and download the Children's Recode in "Flat ASCII data (.dat)" format into `Data/Raw/`. The processed outputs and trained models are already included so the app runs without them.
 
 ---
 
-## 🗂 Project Structure
+## Project Structure
 
 ```
 child-malnutrition/
@@ -139,11 +139,11 @@ child-malnutrition/
         └── keep-alive.yml           # Prevents backend cold starts
 ```
 
-> ⚠️ **Frontend data note:** the Dashboard and District Explorer pages read from the **bundled** `frontend/src/data/districtData.json`, not a live API call — this was a source of confusion during the v2 rebuild (backend data was correct but the dashboard kept showing stale numbers because this static file wasn't regenerated). If you update `Data/Processed/district_predictions_all_types.csv`, you must also regenerate `districtData.json` and redeploy the frontend — updating the backend alone is not enough for those two pages.
+> **Frontend data note:** the Dashboard and District Explorer pages read from the **bundled** `frontend/src/data/districtData.json`, not a live API call. After updating `Data/Processed/district_predictions_all_types.csv`, you must also regenerate `districtData.json` and redeploy the frontend — updating the backend alone does not update those two pages.
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -188,7 +188,7 @@ Frontend will be running at `http://localhost:3000`
 
 ---
 
-## 🔌 API Reference
+## API Reference
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -280,7 +280,7 @@ Only one feature may be changed per request — `feature_deltas` with more than 
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 | Layer | Platform |
 |---|---|
@@ -291,13 +291,13 @@ A GitHub Actions workflow (`.github/workflows/keep-alive.yml`) pings the backend
 
 ---
 
-## 📊 Data
+## Data
 
-Built on **NFHS-5 (National Family Health Survey 5, 2019–21)**, India's national health survey. The current model trains on **232,920 individual child records** (DHS Children's Recode); the previous pipeline used a 707-row district-level aggregate. Both processed datasets are included in `Data/Processed/`; raw microdata is not included (see [Notebooks](#-notebooks) for how to obtain it).
+Built on **NFHS-5 (National Family Health Survey 5, 2019–21)**, India's national health survey. The current model trains on **232,920 individual child records** (DHS Children's Recode); the previous pipeline used a 707-row district-level aggregate. Both processed datasets are included in `Data/Processed/`; raw microdata is not included (see [Notebooks](#notebooks) for how to obtain it).
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Frontend:** React, Recharts, Lucide
 - **Backend:** FastAPI, Python
@@ -307,6 +307,6 @@ Built on **NFHS-5 (National Family Health Survey 5, 2019–21)**, India's nation
 
 ---
 
-## 👤 Author
+## Author
 
 **Vaibhav Dubey** — [github.com/Vdubey165](https://github.com/Vdubey165)
